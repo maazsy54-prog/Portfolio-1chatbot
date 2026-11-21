@@ -1,0 +1,79 @@
+"""Shared timeout + retry wrapper for every external call.
+
+Transient failures (timeouts, connection errors, 429/5xx) are retried with
+exponential backoff. Anything that still fails is raised as a single
+ServiceUnavailableError (HTTP 503) so routes never leak vendor exceptions.
+"""
+import asyncio
+import logging
+from collections.abc import Awaitable, Callable
+from typing import TypeVar
+
+import httpx
+from tenacity import (
+    AsyncRetrying,
+    retry_if_exception,
+    stop_after_attempt,
+    wait_exponential_jitter,
+    wait_none,
+)
+
+from app.config import Settings
+from app.errors import ServiceUnavailableError
+
+try:  # pinecone's sync client uses urllib3
+    from urllib3.exceptions import HTTPError as _Urllib3Error
+except ImportError:  # pragma: no cover
+    _Urllib3Error = ()  # type: ignore[assignment,misc]
+
+logger = logging.getLogger(__name__)
+T = TypeVar("T")
+
+TRANSIENT_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
+
+
+def is_transient(exc: BaseException) -> bool:
+    """Return True if retrying the call could plausibly succeed."""
+    if isinstance(
+        exc, (asyncio.TimeoutError, TimeoutError, ConnectionError,
+              httpx.TimeoutException, httpx.TransportError)
+    ):
+        return True
+    if _Urllib3Error and isinstance(exc, _Urllib3Error):
+        return True
+    # Cohere errors expose .status_code; Pinecone's expose .status
+    status = getattr(exc, "status_code", None) or getattr(exc, "status", None)
+    return status in TRANSIENT_STATUS_CODES
+
+
+async def call_with_retries(
+    fn: Callable[[], Awaitable[T]], *, service: str, settings: Settings
+) -> T:
+    """Run `fn` with a per-attempt timeout and retries on transient errors.
+
+    Raises:
+        ServiceUnavailableError: the call failed or kept failing.
+    """
+    wait = (
+        wait_exponential_jitter(initial=settings.retry_backoff_seconds, max=8)
+        if settings.retry_backoff_seconds > 0
+        else wait_none()
+    )
+    result: T
+    try:
+        async for attempt in AsyncRetrying(
+            stop=stop_after_attempt(max(1, settings.max_retries)),
+            wait=wait,
+            retry=retry_if_exception(is_transient),
+            reraise=True,
+        ):
+            with attempt:
+                result = await asyncio.wait_for(fn(), timeout=settings.http_timeout_seconds)
+    except Exception as exc:
+        # Log the type and status only: messages could echo request details.
+        logger.error(
+            "%s call failed: %s (status=%s)", service, type(exc).__name__,
+            getattr(exc, "status_code", None) or getattr(exc, "status", None),
+        )
+        raise ServiceUnavailableError(f"{service} is temporarily unavailable.") from exc
+    return result
