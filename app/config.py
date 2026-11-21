@@ -43,10 +43,17 @@ class Settings(BaseSettings):
     chunk_size_tokens: int = 400
     chunk_overlap_tokens: int = 50
 
-    # --- Retrieval (threshold is calibrated later from eval data) ---
-    retrieval_top_k: int = 20
-    rerank_top_n: int = 5
-    similarity_threshold: float = 0.0
+    # --- Retrieval (thresholds are calibrated later from eval data) ---
+    retrieval_top_k: int = 20  # candidates fetched from the vector DB
+    context_top_n: int = 5  # chunks passed to the LLM after reranking
+    similarity_threshold: float = 0.0  # min vector score when reranking is off
+    rerank_enabled: bool = True
+    rerank_threshold: float = 0.0  # min rerank score when reranking is on
+
+    # --- Generation ---
+    llm_temperature: float = 0.0
+    llm_max_tokens: int = 800
+    max_context_chars: int = 12000  # cap on excerpt text sent to the LLM
 
     # --- Limits ---
     max_upload_mb: int = 10
