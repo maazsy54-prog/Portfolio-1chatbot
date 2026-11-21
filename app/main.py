@@ -5,26 +5,33 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.config import get_settings
+from app.components import Components, build_components
+from app.config import Settings, get_settings
+from app.db.session import init_db
 from app.errors import register_exception_handlers
 from app.logging_conf import RequestContextMiddleware, configure_logging
-from app.routers import health
+from app.routers import ask, documents, health
 
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    """Startup/shutdown hook (DB and API clients are opened/closed here later)."""
-    logger.info("Starting %s", app.title)
-    yield
-    logger.info("Shutting down")
-
-
-def create_app() -> FastAPI:
-    """Build and configure the FastAPI application."""
-    settings = get_settings()
+def create_app(
+    settings: Settings | None = None, components: Components | None = None
+) -> FastAPI:
+    """Build the FastAPI application. Tests pass fake components."""
+    settings = settings or get_settings()
     configure_logging(settings)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        """Open clients and the database at startup; close them at shutdown."""
+        logger.info("Starting %s", app.title)
+        app.state.settings = settings
+        app.state.components = components or build_components(settings)
+        await init_db(app.state.components.engine)
+        yield
+        await app.state.components.engine.dispose()
+        logger.info("Shut down")
 
     app = FastAPI(
         title=settings.app_name,
@@ -35,6 +42,8 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
     register_exception_handlers(app)
     app.include_router(health.router)
+    app.include_router(documents.router)
+    app.include_router(ask.router)
     return app
 
 

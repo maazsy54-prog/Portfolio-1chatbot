@@ -80,9 +80,9 @@ class Settings(BaseSettings):
         - sslmode=...                   ->  ssl=...  (asyncpg's name for it)
         - channel_binding=...           ->  dropped  (not supported by asyncpg)
         """
-        if not isinstance(value, str) or not value:
-            return value
-        value = re.sub(r"^postgres(ql)?://", "postgresql+asyncpg://", value)
+        if not isinstance(value, str) or not re.match(r"^postgres(ql)?(\+\w+)?://", value):
+            return value  # empty, or not Postgres (e.g. sqlite in tests): leave untouched
+        value = re.sub(r"^postgres(ql)?(\+\w+)?://", "postgresql+asyncpg://", value)
         parts = urlsplit(value)
         query = [(k, v) for k, v in parse_qsl(parts.query) if k != "channel_binding"]
         query = [("ssl", v) if k == "sslmode" else (k, v) for k, v in query]

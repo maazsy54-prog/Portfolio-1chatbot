@@ -8,6 +8,7 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import InterfaceError, OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 logger = logging.getLogger(__name__)
@@ -97,6 +98,15 @@ def register_exception_handlers(app: FastAPI) -> None:
         return _error_response(
             request, exc.status_code, codes.get(exc.status_code, "http_error"),
             str(exc.detail), headers=getattr(exc, "headers", None),
+        )
+
+    @app.exception_handler(OperationalError)
+    @app.exception_handler(InterfaceError)
+    async def handle_database_down(request: Request, exc: Exception) -> JSONResponse:
+        # Connection failures / timeouts to Postgres: a dependency outage, not a bug.
+        logger.error("Database unavailable: %s [request_id=%s]", type(exc).__name__, _request_id(request))
+        return _error_response(
+            request, 503, "service_unavailable", "The database is temporarily unavailable."
         )
 
     @app.exception_handler(Exception)
