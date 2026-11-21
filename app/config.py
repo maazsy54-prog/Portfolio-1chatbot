@@ -3,9 +3,11 @@
 All configuration lives here. Secrets are read from environment variables
 (or a local, git-ignored .env file) and are never hard-coded.
 """
+import re
 from functools import lru_cache
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-from pydantic import SecretStr
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -41,20 +43,52 @@ class Settings(BaseSettings):
     chunk_size_tokens: int = 400
     chunk_overlap_tokens: int = 50
 
-    # --- Retrieval (threshold is calibrated later from eval data) ---
-    retrieval_top_k: int = 20
-    rerank_top_n: int = 5
-    similarity_threshold: float = 0.0
+    # --- Retrieval (thresholds are calibrated later from eval data) ---
+    retrieval_top_k: int = 20  # candidates fetched from the vector DB
+    context_top_n: int = 5  # chunks passed to the LLM after reranking
+    similarity_threshold: float = 0.0  # min vector score when reranking is off
+    rerank_enabled: bool = True
+    rerank_threshold: float = 0.0  # min rerank score when reranking is on
+
+    # --- Generation ---
+    llm_temperature: float = 0.0
+    llm_max_tokens: int = 800
+    max_context_chars: int = 12000  # cap on excerpt text sent to the LLM
 
     # --- Limits ---
     max_upload_mb: int = 10
     max_pdf_pages: int = 300
     max_question_chars: int = 1000
-    rate_limit: str = "30/minute"
+    rate_limit_ask_per_minute: int = 30
+    rate_limit_upload_per_minute: int = 10
+    trust_proxy_headers: bool = False  # True only behind a trusted proxy (X-Forwarded-For)
 
     # --- External call resilience ---
     http_timeout_seconds: float = 30.0
     max_retries: int = 3
+    retry_backoff_seconds: float = 0.5  # initial backoff; grows exponentially
+    embed_batch_size: int = 96  # Cohere's maximum texts per embed call
+    embed_concurrency: int = 4  # parallel embed requests
+    upsert_batch_size: int = 100  # vectors per Pinecone upsert request
+    index_visibility_timeout_seconds: float = 15.0  # wait for fresh vectors
+    index_poll_interval_seconds: float = 0.5  # how often to re-check visibility
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_url(cls, value: object) -> object:
+        """Convert a standard Postgres URL into the asyncpg form.
+
+        - postgres:// or postgresql://  ->  postgresql+asyncpg://
+        - sslmode=...                   ->  ssl=...  (asyncpg's name for it)
+        - channel_binding=...           ->  dropped  (not supported by asyncpg)
+        """
+        if not isinstance(value, str) or not re.match(r"^postgres(ql)?(\+\w+)?://", value):
+            return value  # empty, or not Postgres (e.g. sqlite in tests): leave untouched
+        value = re.sub(r"^postgres(ql)?(\+\w+)?://", "postgresql+asyncpg://", value)
+        parts = urlsplit(value)
+        query = [(k, v) for k, v in parse_qsl(parts.query) if k != "channel_binding"]
+        query = [("ssl", v) if k == "sslmode" else (k, v) for k, v in query]
+        return urlunsplit(parts._replace(query=urlencode(query)))
 
     def secret_values(self) -> list[str]:
         """Return all non-empty secret values (used by the log redactor)."""

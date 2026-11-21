@@ -8,6 +8,7 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import InterfaceError, OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 logger = logging.getLogger(__name__)
@@ -19,10 +20,13 @@ class AppError(Exception):
     status_code: int = 500
     code: str = "internal_error"
 
-    def __init__(self, message: str, *, details: Any = None) -> None:
+    def __init__(
+        self, message: str, *, details: Any = None, headers: dict[str, str] | None = None
+    ) -> None:
         super().__init__(message)
         self.message = message
         self.details = details
+        self.headers = headers
 
 
 class BadRequestError(AppError):
@@ -80,7 +84,9 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(AppError)
     async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:
-        return _error_response(request, exc.status_code, exc.code, exc.message, exc.details)
+        return _error_response(
+            request, exc.status_code, exc.code, exc.message, exc.details, headers=exc.headers
+        )
 
     @app.exception_handler(RequestValidationError)
     async def handle_validation(request: Request, exc: RequestValidationError) -> JSONResponse:
@@ -97,6 +103,15 @@ def register_exception_handlers(app: FastAPI) -> None:
         return _error_response(
             request, exc.status_code, codes.get(exc.status_code, "http_error"),
             str(exc.detail), headers=getattr(exc, "headers", None),
+        )
+
+    @app.exception_handler(OperationalError)
+    @app.exception_handler(InterfaceError)
+    async def handle_database_down(request: Request, exc: Exception) -> JSONResponse:
+        # Connection failures / timeouts to Postgres: a dependency outage, not a bug.
+        logger.error("Database unavailable: %s [request_id=%s]", type(exc).__name__, _request_id(request))
+        return _error_response(
+            request, 503, "service_unavailable", "The database is temporarily unavailable."
         )
 
     @app.exception_handler(Exception)
