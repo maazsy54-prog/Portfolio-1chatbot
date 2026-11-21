@@ -1,0 +1,5 @@
+* [33m6bc51c2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/chunking[m[33m, [m[1;31morigin/feature/chunking[m[33m)[m feat(ingestion): add token-aware chunker, reflow PDF paragraphs, notebook 02
+[31m|[m * [33mb626e94[m[33m ([m[1;31morigin/feature/ingestion[m[33m, [m[1;32mfeature/ingestion[m[33m)[m feat(ingestion): add validation, PDF/DOCX extraction, service check, DB URL normalisation
+[31m|[m[31m/[m  
+* [33m11714fc[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/chore/scaffold[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m, [m[1;32mchore/scaffold[m[33m)[m chore: scaffold FastAPI app with config, error handling, logging and health route
+* [33m41c9a8e[m Initial commit
