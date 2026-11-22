@@ -128,19 +128,26 @@ class LLMClient:
         self._settings = settings
         self._client = client or make_cohere_client(settings)
 
-    async def chat_json(self, *, system: str, user: str) -> LLMResponse:
-        """Send one system + user message pair and return the JSON reply."""
+    async def chat_json(
+        self, *, system: str, user: str,
+        schema: dict[str, Any] | None = None, model: str | None = None,
+    ) -> LLMResponse:
+        """Send one system + user message pair and return the JSON reply.
+
+        `schema` and `model` default to the answer schema and answer model; the
+        evaluation judge passes its own.
+        """
 
         async def call() -> LLMResponse:
             response = await self._client.chat(
-                model=self._settings.llm_model,
+                model=model or self._settings.llm_model,
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
                 ],
                 temperature=self._settings.llm_temperature,
                 max_tokens=self._settings.llm_max_tokens,
-                response_format=cohere.JsonObjectResponseFormatV2(json_schema=ANSWER_SCHEMA),
+                response_format=cohere.JsonObjectResponseFormatV2(json_schema=schema or ANSWER_SCHEMA),
             )
             parts = response.message.content or []
             text = "".join(getattr(p, "text", "") or "" for p in parts)

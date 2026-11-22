@@ -11,7 +11,8 @@ from typing import Any, TypeVar
 
 from pinecone import Pinecone
 
-from app.clients.resilience import call_with_retries
+from app.clients.resilience import call_with_retries, get_status
+from app.errors import ServiceUnavailableError
 from app.config import Settings
 
 T = TypeVar("T")
@@ -113,9 +114,10 @@ class VectorStore:
         """Delete everything in a namespace (used to clean up scratch data)."""
         try:
             await self._call(lambda idx: idx.delete(delete_all=True, namespace=namespace))
-        except Exception as exc:
-            if getattr(getattr(exc, "__cause__", None), "status", None) != 404:
-                raise  # a missing namespace is fine; anything else is not
+        except ServiceUnavailableError as exc:
+            if get_status(exc.__cause__) == 404:
+                return  # the namespace does not exist yet: nothing to delete
+            raise
 
     async def wait_until_visible(
         self, record: VectorRecord, namespace: str | None = None

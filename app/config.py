@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     llm_temperature: float = 0.0
     llm_max_tokens: int = 800
     max_context_chars: int = 12000  # cap on excerpt text sent to the LLM
+    judge_model: str = ""  # evaluation judge; empty = same as llm_model (prefer a different model)
 
     # --- Limits ---
     max_upload_mb: int = 10

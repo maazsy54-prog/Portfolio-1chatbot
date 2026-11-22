@@ -1,0 +1,3011 @@
+{
+  "meta": {
+    "timestamp": "2026-11-22 05:17 UTC",
+    "git_commit": "de86da2",
+    "python": "3.14.6",
+    "golden_questions": 40,
+    "golden_sha256": "dd04bfe127ca22ee4827b8e333a0b3506f9b9ecc382dab4b468dd0333b36e87a",
+    "embedding_model": "embed-v4.0",
+    "embedding_dim": 1024,
+    "llm_model": "command-a-03-2025",
+    "judge_model": "command-a-03-2025 (same as LLM)",
+    "rerank_model": "rerank-v3.5",
+    "temperature": 0.0,
+    "retrieval_top_k": 20,
+    "context_top_n": 5,
+    "ingested": {
+      "eval-c400-o50": {
+        "files": 2,
+        "chunks": 9
+      }
+    },
+    "judge_used": true
+  },
+  "configs": {
+    "B": {
+      "config": {
+        "name": "B",
+        "chunk_size": 400,
+        "chunk_overlap": 50,
+        "rerank": true,
+        "similarity_threshold": 0.0,
+        "rerank_threshold": 0.0,
+        "description": "400/50 + Cohere rerank (isolates the effect of reranking)"
+      },
+      "summary": {
+        "n_questions": 40,
+        "n_errors": 0,
+        "n_answerable": 32,
+        "n_unanswerable": 8,
+        "retrieval": {
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "mrr": 1.0,
+          "source_page_acc": 1.0
+        },
+        "answers": {
+          "correct_rate": 1.0,
+          "faithful_rate": 1.0,
+          "fact_recall": 0.984375,
+          "citation_precision": 0.953125,
+          "false_refusal_rate": 0.0,
+          "unanswerable_refused_rate": 1.0,
+          "unanswerable_hallucinated_rate": 0.0
+        },
+        "by_type": {
+          "direct": {
+            "n": 15,
+            "hit@5": 1.0,
+            "recall@5": 1.0,
+            "correct": 1.0
+          },
+          "multi_part": {
+            "n": 7,
+            "hit@5": 1.0,
+            "recall@5": 1.0,
+            "correct": 1.0
+          },
+          "reworded": {
+            "n": 10,
+            "hit@5": 1.0,
+            "recall@5": 1.0,
+            "correct": 1.0
+          }
+        },
+        "latency_s": {
+          "p50": 8.030000000000001,
+          "p95": 32.953199999999995
+        },
+        "tokens_per_question": {
+          "generation_in": 2850.75,
+          "generation_out": 53.525,
+          "judge_total": 2028.2
+        },
+        "calibration": {
+          "vector_score": {
+            "n_answerable": 32,
+            "n_unanswerable": 8,
+            "best_threshold": 0.3387,
+            "balanced_accuracy": 0.8281,
+            "answerable_kept": 0.9062,
+            "unanswerable_rejected": 0.75,
+            "keep_all_answerable_threshold": 0.3195,
+            "unanswerable_rejected_at_keep_all": 0.375,
+            "answerable_score_range": [
+              0.3195,
+              0.5639
+            ],
+            "unanswerable_score_range": [
+              0.1909,
+              0.5184
+            ]
+          },
+          "rerank_score": {
+            "n_answerable": 32,
+            "n_unanswerable": 8,
+            "best_threshold": 0.219,
+            "balanced_accuracy": 0.9688,
+            "answerable_kept": 0.9375,
+            "unanswerable_rejected": 1.0,
+            "keep_all_answerable_threshold": 0.1518,
+            "unanswerable_rejected_at_keep_all": 0.625,
+            "answerable_score_range": [
+              0.1518,
+              0.9063
+            ],
+            "unanswerable_score_range": [
+              0.0343,
+              0.2183
+            ]
+          }
+        }
+      },
+      "failures": [],
+      "results": [
+        {
+          "id": "q001",
+          "type": "direct",
+          "question": "How long does standard shipping take?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 10.996,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.5478,
+              "rerank_score": 0.8336,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3985,
+              "rerank_score": 0.3465,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3609,
+              "rerank_score": 0.242,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2718,
+              "rerank_score": 0.0998,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2479,
+              "rerank_score": 0.0984,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.547799289,
+          "top_rerank_score": 0.8335554,
+          "answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2308,
+          "output_tokens": 38,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2296,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q002",
+          "type": "direct",
+          "question": "How much does standard shipping cost?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 8.365,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.4914,
+              "rerank_score": 0.8048,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3127,
+              "rerank_score": 0.1529,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3353,
+              "rerank_score": 0.1074,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2467,
+              "rerank_score": 0.0582,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2766,
+              "rerank_score": 0.0474,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.491367102,
+          "top_rerank_score": 0.8047902,
+          "answer": "Standard shipping costs $4.99, but it is free on orders over $50.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2629,
+          "output_tokens": 40,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2621,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q003",
+          "type": "direct",
+          "question": "What does express shipping cost and how fast is it?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 8.57,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.4754,
+              "rerank_score": 0.8864,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3743,
+              "rerank_score": 0.1329,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3224,
+              "rerank_score": 0.0949,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2854,
+              "rerank_score": 0.0403,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2221,
+              "rerank_score": 0.0361,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.47542879,
+          "top_rerank_score": 0.8863518,
+          "answer": "Express shipping costs $12.99 and delivers within 2 business days of dispatch.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2633,
+          "output_tokens": 39,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2623,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q004",
+          "type": "direct",
+          "question": "Do you ship internationally?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 13.719,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3485,
+              "rerank_score": 0.6957,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2477,
+              "rerank_score": 0.0998,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2642,
+              "rerank_score": 0.0952,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2772,
+              "rerank_score": 0.095,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2919,
+              "rerank_score": 0.0894,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.348475963,
+          "top_rerank_score": 0.69573146,
+          "answer": "Yes, Nimbus Outdoor Co. ships to 32 countries. International delivery takes 10 to 14 business days, and the customer is responsible for any customs duties and import taxes.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2306,
+          "output_tokens": 60,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2333,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q005",
+          "type": "direct",
+          "question": "What is the cut-off time for same-day dispatch?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 10.84,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.4921,
+              "rerank_score": 0.8507,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3777,
+              "rerank_score": 0.8246,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2074,
+              "rerank_score": 0.071,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.265,
+              "rerank_score": 0.058,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2044,
+              "rerank_score": 0.046,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.492063373,
+          "top_rerank_score": 0.8506799,
+          "answer": "The cut-off time for same-day dispatch is 2:00 PM Eastern Time on a business day.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:1",
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2358,
+          "output_tokens": 46,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2356,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q006",
+          "type": "direct",
+          "question": "What is your return window?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 8.348,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3803,
+              "rerank_score": 0.6947,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3211,
+              "rerank_score": 0.1461,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2337,
+              "rerank_score": 0.1129,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1732,
+              "rerank_score": 0.0773,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.1903,
+              "rerank_score": 0.0525,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.380255163,
+          "top_rerank_score": 0.6947383,
+          "answer": "You can return most items within 30 days of delivery.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:1"
+          ],
+          "input_tokens": 2367,
+          "output_tokens": 33,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2345,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q007",
+          "type": "direct",
+          "question": "How long do refunds take?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 7.12,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4901,
+              "rerank_score": 0.7017,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.331,
+              "rerank_score": 0.2712,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3337,
+              "rerank_score": 0.2423,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2246,
+              "rerank_score": 0.1102,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2081,
+              "rerank_score": 0.1097,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.490146279,
+          "top_rerank_score": 0.7016523,
+          "answer": "Refunds are issued to the original payment method within 5 to 10 business days after the returned item is received.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 2351,
+          "output_tokens": 45,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2354,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q008",
+          "type": "direct",
+          "question": "How long is the warranty?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 11.12,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3512,
+              "rerank_score": 0.6064,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.328,
+              "rerank_score": 0.3056,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1984,
+              "rerank_score": 0.156,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2105,
+              "rerank_score": 0.0851,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1852,
+              "rerank_score": 0.0507,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.351214826,
+          "top_rerank_score": 0.6063825,
+          "answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 5377,
+          "output_tokens": 111,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2690,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q009",
+          "type": "direct",
+          "question": "Is the warranty transferable?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 7.712,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.5112,
+              "rerank_score": 0.829,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3273,
+              "rerank_score": 0.0805,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2024,
+              "rerank_score": 0.0748,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1648,
+              "rerank_score": 0.0468,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2351,
+              "rerank_score": 0.0408,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.511206627,
+          "top_rerank_score": 0.82895297,
+          "answer": "The warranty is not transferable. It applies only to the original purchaser and requires proof of purchase. [1][2]",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:3",
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 2350,
+          "output_tokens": 45,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2343,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 0.5
+        },
+        {
+          "id": "q010",
+          "type": "direct",
+          "question": "Which payment methods do you accept?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 35.503,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4158,
+              "rerank_score": 0.796,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2566,
+              "rerank_score": 0.2015,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2233,
+              "rerank_score": 0.1553,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2136,
+              "rerank_score": 0.0905,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2633,
+              "rerank_score": 0.0878,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.415751338,
+          "top_rerank_score": 0.7959917,
+          "answer": "We accept Visa, Mastercard, American Express, PayPal, and Apple Pay. Cash on delivery is not available.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2613,
+          "output_tokens": 42,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the payment methods accepted and the unavailability of cash on delivery as stated in the reference answer and supported by the retrieved excerpts.",
+          "judge_tokens": 2624,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q011",
+          "type": "direct",
+          "question": "How do I reset my password?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 6.837,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.328,
+              "rerank_score": 0.6022,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1752,
+              "rerank_score": 0.0981,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1762,
+              "rerank_score": 0.0464,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1816,
+              "rerank_score": 0.0416,
+              "relevant": false
+            },
+            {
+              "id": "15796fced436:0",
+              "filename": "Three Linked Professional Development Goals.docx",
+              "page": null,
+              "score": 0.172,
+              "rerank_score": 0.0405,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.327977955,
+          "top_rerank_score": 0.6021791,
+          "answer": "Use the Forgot Password link on the login page. The reset link we email expires after 30 minutes.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2869,
+          "output_tokens": 42,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer exactly and is supported by the retrieved excerpts.",
+          "judge_tokens": 2866,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q012",
+          "type": "direct",
+          "question": "What are your customer support hours?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 32.819,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4108,
+              "rerank_score": 0.6927,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3637,
+              "rerank_score": 0.1389,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.334,
+              "rerank_score": 0.1376,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.466,
+              "rerank_score": 0.1307,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3691,
+              "rerank_score": 0.0633,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.465987921,
+          "top_rerank_score": 0.69274646,
+          "answer": "Customer support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. Support is closed on Sundays.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2613,
+          "output_tokens": 56,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the support hours stated in the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2642,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q013",
+          "type": "direct",
+          "question": "How quickly do you respond to emails?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 3.586,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3785,
+              "rerank_score": 0.7811,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2997,
+              "rerank_score": 0.6539,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2788,
+              "rerank_score": 0.1266,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2388,
+              "rerank_score": 0.1174,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2864,
+              "rerank_score": 0.0827,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.378536969,
+          "top_rerank_score": 0.7811474,
+          "answer": "We respond to support emails within 1 business day.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:5",
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2658,
+          "output_tokens": 34,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2632,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 0.5
+        },
+        {
+          "id": "q014",
+          "type": "direct",
+          "question": "Do you offer discounts for bulk or group orders?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 10.809,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.5256,
+              "rerank_score": 0.9063,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3044,
+              "rerank_score": 0.1165,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3035,
+              "rerank_score": 0.098,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2554,
+              "rerank_score": 0.0868,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2613,
+              "rerank_score": 0.0653,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.525577664,
+          "top_rerank_score": 0.90633047,
+          "answer": "Yes. Orders of 20 or more units of the same product receive a 10% discount. Contact sales@nimbusoutdoor.example to arrange it.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:6"
+          ],
+          "input_tokens": 2616,
+          "output_tokens": 54,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2636,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q015",
+          "type": "direct",
+          "question": "Do you price match?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 11.602,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.4517,
+              "rerank_score": 0.7877,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2432,
+              "rerank_score": 0.0619,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.272,
+              "rerank_score": 0.0535,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2835,
+              "rerank_score": 0.0488,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.251,
+              "rerank_score": 0.0463,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.451746285,
+          "top_rerank_score": 0.7876867,
+          "answer": "Yes, Nimbus Outdoor Co. matches the price of an identical item from an authorized retailer if you ask within 14 days of purchase. However, clearance items and marketplace sellers are excluded from this policy.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:6"
+          ],
+          "input_tokens": 2627,
+          "output_tokens": 62,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2653,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q016",
+          "type": "reworded",
+          "question": "How many days will it take for my parcel to arrive with the regular delivery option?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 7.628,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3195,
+              "rerank_score": 0.2813,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2884,
+              "rerank_score": 0.2686,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2544,
+              "rerank_score": 0.1542,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2175,
+              "rerank_score": 0.0504,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2241,
+              "rerank_score": 0.0452,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.319509357,
+          "top_rerank_score": 0.2812506,
+          "answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2362,
+          "output_tokens": 38,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2350,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q017",
+          "type": "reworded",
+          "question": "If I send something back after 40 days, can I still get my money back?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 11.654,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4194,
+              "rerank_score": 0.2131,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3852,
+              "rerank_score": 0.156,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3435,
+              "rerank_score": 0.1017,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3023,
+              "rerank_score": 0.0895,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.313,
+              "rerank_score": 0.0632,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.419380665,
+          "top_rerank_score": 0.21314816,
+          "answer": "No, items returned between 31 and 60 days after delivery are eligible for store credit only, not a refund to the original payment method [1].",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 4793,
+          "output_tokens": 106,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2397,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q018",
+          "type": "reworded",
+          "question": "My returned item got broken by the delivery company. What should I do?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 10.048,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3235,
+              "rerank_score": 0.3737,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.22,
+              "rerank_score": 0.1794,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2958,
+              "rerank_score": 0.1114,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2646,
+              "rerank_score": 0.1007,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1949,
+              "rerank_score": 0.0256,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.323486984,
+          "top_rerank_score": 0.37367067,
+          "answer": "If your return arrives damaged because of the courier, send photos of the damage to support within 48 hours of delivery so Nimbus Outdoor Co. can file a claim and arrange a replacement.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 4753,
+          "output_tokens": 116,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2377,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q019",
+          "type": "reworded",
+          "question": "How long do I have to wait for my refund once you receive the item back?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 3.854,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.5242,
+              "rerank_score": 0.492,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.4009,
+              "rerank_score": 0.3286,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3133,
+              "rerank_score": 0.1977,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2594,
+              "rerank_score": 0.1486,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2466,
+              "rerank_score": 0.0794,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.524161935,
+          "top_rerank_score": 0.4920179,
+          "answer": "Refunds are issued to the original payment method within 5 to 10 business days after the returned item is received.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 2362,
+          "output_tokens": 45,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2364,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q020",
+          "type": "reworded",
+          "question": "Am I able to hand my tent warranty over to a friend?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 6.115,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4248,
+              "rerank_score": 0.1518,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3636,
+              "rerank_score": 0.0938,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2077,
+              "rerank_score": 0.0597,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2602,
+              "rerank_score": 0.0409,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1704,
+              "rerank_score": 0.0387,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.424779743,
+          "top_rerank_score": 0.15179348,
+          "answer": "No, the warranty is not transferable and applies only to the original purchaser, who must provide proof of purchase. [1][2]",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:3",
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 2358,
+          "output_tokens": 50,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2354,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 0.5
+        },
+        {
+          "id": "q021",
+          "type": "reworded",
+          "question": "How many years is a sleeping bag guaranteed for?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 12.839,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4547,
+              "rerank_score": 0.59,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3562,
+              "rerank_score": 0.0767,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2322,
+              "rerank_score": 0.051,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2678,
+              "rerank_score": 0.0473,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2603,
+              "rerank_score": 0.0339,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.454709888,
+          "top_rerank_score": 0.5900477,
+          "answer": "Sleeping bags have a 5 year warranty.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2"
+          ],
+          "input_tokens": 5385,
+          "output_tokens": 59,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer correctly states the warranty period for sleeping bags as 5 years, which is supported by the retrieved excerpts.",
+          "judge_tokens": 2679,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q022",
+          "type": "reworded",
+          "question": "Does it work to use a second discount code on the same order?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 3.99,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2993,
+              "rerank_score": 0.5472,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.3426,
+              "rerank_score": 0.187,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2049,
+              "rerank_score": 0.063,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1703,
+              "rerank_score": 0.053,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2327,
+              "rerank_score": 0.0469,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.34258002,
+          "top_rerank_score": 0.54724693,
+          "answer": "No, only one promo code can be applied to each order.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2636,
+          "output_tokens": 33,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer matches the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2614,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q023",
+          "type": "reworded",
+          "question": "When can I reach someone at customer service on a Saturday?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 3.062,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3133,
+              "rerank_score": 0.2198,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3404,
+              "rerank_score": 0.1451,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.236,
+              "rerank_score": 0.074,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3683,
+              "rerank_score": 0.0664,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3247,
+              "rerank_score": 0.0434,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.368314952,
+          "top_rerank_score": 0.21980645,
+          "answer": "Customer support is available on Saturdays from 10 AM to 2 PM Eastern Time.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2618,
+          "output_tokens": 38,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer correctly states the Saturday customer support hours as 10 AM to 2 PM Eastern Time, matching the reference answer and supported by the retrieved excerpts.",
+          "judge_tokens": 2641,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q024",
+          "type": "reworded",
+          "question": "Is there a cheaper price available for students?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 4.012,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.4144,
+              "rerank_score": 0.2894,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2249,
+              "rerank_score": 0.0251,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1625,
+              "rerank_score": 0.0233,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1808,
+              "rerank_score": 0.0167,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1686,
+              "rerank_score": 0.0132,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.414351434,
+          "top_rerank_score": 0.28936717,
+          "answer": "Yes, verified students receive a 10% discount through a verification partner at checkout.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:6"
+          ],
+          "input_tokens": 2631,
+          "output_tokens": 38,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2619,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q025",
+          "type": "reworded",
+          "question": "Can you match a lower price that I found at another shop?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 4.392,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.3947,
+              "rerank_score": 0.2309,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1989,
+              "rerank_score": 0.0689,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2198,
+              "rerank_score": 0.0644,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1866,
+              "rerank_score": 0.0615,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2456,
+              "rerank_score": 0.0507,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.394668192,
+          "top_rerank_score": 0.23090285,
+          "answer": "Yes, Nimbus Outdoor Co. will match the price of an identical item from an authorized retailer if you request it within 14 days of your purchase. However, clearance items and marketplace sellers are excluded from this policy.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:6"
+          ],
+          "input_tokens": 2635,
+          "output_tokens": 65,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2664,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q026",
+          "type": "multi_part",
+          "question": "How much does standard shipping cost, and how long does it take?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 11.604,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.5639,
+              "rerank_score": 0.8422,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3635,
+              "rerank_score": 0.2084,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3802,
+              "rerank_score": 0.1619,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2879,
+              "rerank_score": 0.0759,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2869,
+              "rerank_score": 0.067,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.563926578,
+          "top_rerank_score": 0.84215075,
+          "answer": "Standard shipping costs $4.99 and takes 5 to 7 business days from the date your order is dispatched.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:0"
+          ],
+          "input_tokens": 2636,
+          "output_tokens": 45,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the information from the reference answer and the retrieved excerpts.",
+          "judge_tokens": 2651,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q027",
+          "type": "multi_part",
+          "question": "What is the return window, and who pays for return shipping?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 4.599,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4204,
+              "rerank_score": 0.5214,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3964,
+              "rerank_score": 0.2892,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3174,
+              "rerank_score": 0.0971,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1857,
+              "rerank_score": 0.057,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2101,
+              "rerank_score": 0.0433,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.420375615,
+          "top_rerank_score": 0.52144736,
+          "answer": "The return window is 30 days from delivery for most items [2]. Return shipping is free if the item is defective or if the wrong item was sent. Otherwise, a flat $6.50 return label fee is deducted from the refund [1].",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2",
+            "faa90913d3be:1"
+          ],
+          "input_tokens": 2374,
+          "output_tokens": 77,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the key information from the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2433,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q028",
+          "type": "multi_part",
+          "question": "Which payment methods do you accept, and when is my card charged?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 4.424,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4798,
+              "rerank_score": 0.8412,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2683,
+              "rerank_score": 0.0835,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2648,
+              "rerank_score": 0.0823,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.232,
+              "rerank_score": 0.0538,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2039,
+              "rerank_score": 0.053,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.479847431,
+          "top_rerank_score": 0.8412138,
+          "answer": "We accept Visa, Mastercard, American Express, PayPal, and Apple Pay [1]. Your card is authorized when you place the order and charged when the order is dispatched [1].",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 2620,
+          "output_tokens": 53,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2648,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q029",
+          "type": "multi_part",
+          "question": "How long is the warranty on tents, and how do I make a claim?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 35.754,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.5114,
+              "rerank_score": 0.8483,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.504,
+              "rerank_score": 0.592,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2725,
+              "rerank_score": 0.2223,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2976,
+              "rerank_score": 0.1024,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2758,
+              "rerank_score": 0.0961,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.511366725,
+          "top_rerank_score": 0.8482825,
+          "answer": "Tents have a 2-year warranty [1]. To make a warranty claim, email warranty@nimbusoutdoor.example with your order number and photos of the problem. Nimbus Outdoor Co. will reply within 3 business days [1][2].",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2",
+            "faa90913d3be:3"
+          ],
+          "input_tokens": 2361,
+          "output_tokens": 76,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the warranty duration and claim process for tents as stated in the reference answer and supported by the retrieved excerpts.",
+          "judge_tokens": 2436,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 0.5,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q030",
+          "type": "multi_part",
+          "question": "What are your support hours, and how can I contact support?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 5.7,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3868,
+              "rerank_score": 0.7318,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4211,
+              "rerank_score": 0.2734,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3113,
+              "rerank_score": 0.2506,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3032,
+              "rerank_score": 0.1775,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2734,
+              "rerank_score": 0.0681,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.421136618,
+          "top_rerank_score": 0.7318455,
+          "answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. You can contact support via live chat on the website, email support@nimbusoutdoor.example, or call 1-800-555-0142.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4",
+            "faa90913d3be:5"
+          ],
+          "input_tokens": 2663,
+          "output_tokens": 85,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the support hours and contact methods from the reference answer and retrieved excerpts.",
+          "judge_tokens": 2755,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q031",
+          "type": "multi_part",
+          "question": "How do Trail Points work, and how long are gift cards valid?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 13.806,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4496,
+              "rerank_score": 0.8719,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2254,
+              "rerank_score": 0.0465,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1521,
+              "rerank_score": 0.0288,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1489,
+              "rerank_score": 0.0211,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.1275,
+              "rerank_score": 0.0186,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.449552,
+          "top_rerank_score": 0.8719229,
+          "answer": "You earn 1 point for every $1 spent in the Trail Points loyalty program. 100 points can be redeemed for $5 of store credit. Points expire after 12 months of account inactivity. Gift cards are valid for 3 years from the purchase date and cannot be exchanged for cash.",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:4"
+          ],
+          "input_tokens": 5305,
+          "output_tokens": 160,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the reference answer and is supported by the retrieved excerpts.",
+          "judge_tokens": 2707,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q032",
+          "type": "multi_part",
+          "question": "What is the warranty on sleeping bags, and do you offer a student discount?",
+          "answerable": true,
+          "error": null,
+          "latency_s": 3.142,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4557,
+              "rerank_score": 0.4114,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.4726,
+              "rerank_score": 0.404,
+              "relevant": true
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.3345,
+              "rerank_score": 0.0504,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2571,
+              "rerank_score": 0.0495,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2761,
+              "rerank_score": 0.0298,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.472611755,
+          "top_rerank_score": 0.41137156,
+          "answer": "The warranty on sleeping bags is 5 years [1]. Yes, verified students receive a 10% discount through a verification partner at checkout [2].",
+          "refused": false,
+          "refusal_reason": null,
+          "cited": [
+            "faa90913d3be:2",
+            "faa90913d3be:6"
+          ],
+          "input_tokens": 2377,
+          "output_tokens": 62,
+          "correct": true,
+          "faithful": true,
+          "judge_reason": "The candidate answer accurately reflects the warranty period for sleeping bags and the student discount policy as stated in the reference answer and supported by the retrieved excerpts.",
+          "judge_tokens": 2425,
+          "hit@1": 1.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "recall@3": 1.0,
+          "recall@5": 1.0,
+          "rr": 1.0,
+          "source_page_ok": true,
+          "fact_recall": 1.0,
+          "citation_precision": 1.0
+        },
+        {
+          "id": "q033",
+          "type": "unanswerable",
+          "question": "Do you sell hiking boots?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 10.668,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1988,
+              "rerank_score": 0.0967,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2892,
+              "rerank_score": 0.0881,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.3288,
+              "rerank_score": 0.0752,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2959,
+              "rerank_score": 0.0691,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.237,
+              "rerank_score": 0.0686,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.328776717,
+          "top_rerank_score": 0.09674864,
+          "answer": "The documents do not mention hiking boots.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2351,
+          "output_tokens": 27,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q034",
+          "type": "unanswerable",
+          "question": "What is the warranty period for trekking poles?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 3.871,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.432,
+              "rerank_score": 0.1784,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4326,
+              "rerank_score": 0.1722,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2437,
+              "rerank_score": 0.0901,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3039,
+              "rerank_score": 0.0526,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.3024,
+              "rerank_score": 0.0339,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.43261674,
+          "top_rerank_score": 0.17835435,
+          "answer": "The documents do not mention the warranty period for trekking poles.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2370,
+          "output_tokens": 31,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q035",
+          "type": "unanswerable",
+          "question": "Do you offer gift wrapping?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 6.679,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2543,
+              "rerank_score": 0.1492,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2867,
+              "rerank_score": 0.1227,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2994,
+              "rerank_score": 0.115,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.3242,
+              "rerank_score": 0.1096,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.26,
+              "rerank_score": 0.1012,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.324160248,
+          "top_rerank_score": 0.14917187,
+          "answer": "The documents do not cover whether gift wrapping is offered.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2628,
+          "output_tokens": 30,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q036",
+          "type": "unanswerable",
+          "question": "Who is the CEO of Nimbus Outdoor Co.?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 3.689,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.4286,
+              "rerank_score": 0.176,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.5184,
+              "rerank_score": 0.1755,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.4674,
+              "rerank_score": 0.16,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4095,
+              "rerank_score": 0.1545,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.4905,
+              "rerank_score": 0.1266,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.518386126,
+          "top_rerank_score": 0.1759628,
+          "answer": "The documents do not mention the CEO of Nimbus Outdoor Co.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2660,
+          "output_tokens": 32,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q037",
+          "type": "unanswerable",
+          "question": "Do you have a mobile app for iOS?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 10.405,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2142,
+              "rerank_score": 0.107,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.194,
+              "rerank_score": 0.0884,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1146,
+              "rerank_score": 0.0832,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.1943,
+              "rerank_score": 0.0576,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1441,
+              "rerank_score": 0.054,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.214195639,
+          "top_rerank_score": 0.10703566,
+          "answer": "The documents do not mention a mobile app for iOS.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2615,
+          "output_tokens": 30,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q038",
+          "type": "unanswerable",
+          "question": "What is the weather like in Paris today?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 18.304,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1745,
+              "rerank_score": 0.0343,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1323,
+              "rerank_score": 0.0238,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.1156,
+              "rerank_score": 0.0208,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:1",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1909,
+              "rerank_score": 0.0148,
+              "relevant": false
+            },
+            {
+              "id": "15796fced436:0",
+              "filename": "Three Linked Professional Development Goals.docx",
+              "page": null,
+              "score": 0.0533,
+              "rerank_score": 0.0129,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.190864474,
+          "top_rerank_score": 0.03425846,
+          "answer": "The documents do not cover the weather in Paris today.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2887,
+          "output_tokens": 30,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q039",
+          "type": "unanswerable",
+          "question": "How many Trail Points do I need to get a free tent?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 5.155,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:4",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.3349,
+              "rerank_score": 0.2183,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.304,
+              "rerank_score": 0.0535,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.1769,
+              "rerank_score": 0.03,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2399,
+              "rerank_score": 0.0289,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.1641,
+              "rerank_score": 0.0213,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.334868371,
+          "top_rerank_score": 0.21827793,
+          "answer": "The documents do not cover how many Trail Points are needed for a free tent.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2619,
+          "output_tokens": 35,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        },
+        {
+          "id": "q040",
+          "type": "unanswerable",
+          "question": "What are the dimensions of your two-person tent?",
+          "answerable": false,
+          "error": null,
+          "latency_s": 5.034,
+          "retrieved": [
+            {
+              "id": "faa90913d3be:0",
+              "filename": "nimbus_faq.pdf",
+              "page": 1,
+              "score": 0.2072,
+              "rerank_score": 0.1154,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:2",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2734,
+              "rerank_score": 0.0756,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:3",
+              "filename": "nimbus_faq.pdf",
+              "page": 2,
+              "score": 0.2159,
+              "rerank_score": 0.0463,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:6",
+              "filename": "nimbus_faq.pdf",
+              "page": 4,
+              "score": 0.2693,
+              "rerank_score": 0.0367,
+              "relevant": false
+            },
+            {
+              "id": "faa90913d3be:5",
+              "filename": "nimbus_faq.pdf",
+              "page": 3,
+              "score": 0.2057,
+              "rerank_score": 0.0341,
+              "relevant": false
+            }
+          ],
+          "chunks_fetched": 9,
+          "top_vector_score": 0.273362577,
+          "top_rerank_score": 0.1153716,
+          "answer": "The documents do not cover the dimensions of the two-person tent.",
+          "refused": true,
+          "refusal_reason": "not_in_documents",
+          "cited": [],
+          "input_tokens": 2356,
+          "output_tokens": 33,
+          "correct": null,
+          "faithful": null,
+          "judge_reason": null,
+          "judge_tokens": 0
+        }
+      ]
+    }
+  }
+}

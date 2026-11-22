@@ -239,3 +239,66 @@ async def test_vector_db_outage_is_503() -> None:
     store = VectorStore(make_settings(), index=Down())
     with pytest.raises(ServiceUnavailableError):
         await store.query([0.1] * DIM, top_k=1)
+
+
+# ---------- namespace deletion (regression: a missing namespace is a 404, not an outage) ----------
+
+class NamespaceIndex:
+    """Index whose delete(delete_all=True) fails like Pinecone does for a missing namespace."""
+
+    def __init__(self, error: Exception | None) -> None:
+        self.error, self.deleted = error, []
+
+    def delete(self, ids=None, delete_all=False, namespace=""):
+        if self.error:
+            raise self.error
+        self.deleted.append(namespace)
+
+
+class StatusError(Exception):
+    def __init__(self, **attrs) -> None:
+        super().__init__("boom")
+        self.__dict__.update(attrs)
+
+
+async def test_delete_namespace_ignores_missing_namespace_status_code() -> None:
+    store = VectorStore(make_settings(), index=NamespaceIndex(StatusError(status_code=404)))
+    await store.delete_namespace("never-created")  # must not raise
+
+
+async def test_delete_namespace_ignores_missing_namespace_legacy_status_attr() -> None:
+    store = VectorStore(make_settings(), index=NamespaceIndex(StatusError(status=404)))
+    await store.delete_namespace("never-created")
+
+
+async def test_delete_namespace_still_raises_on_real_errors() -> None:
+    store = VectorStore(make_settings(), index=NamespaceIndex(StatusError(status_code=401)))
+    with pytest.raises(ServiceUnavailableError):
+        await store.delete_namespace("x")
+    store = VectorStore(make_settings(), index=NamespaceIndex(StatusError(status_code=500)))
+    with pytest.raises(ServiceUnavailableError):
+        await store.delete_namespace("x")
+
+
+async def test_delete_namespace_deletes_existing() -> None:
+    index = NamespaceIndex(None)
+    await VectorStore(make_settings(), index=index).delete_namespace("scratch")
+    assert index.deleted == ["scratch"]
+
+
+def test_real_pinecone_exception_exposes_status_code() -> None:
+    """The installed SDK's own 404 must be recognised by our status helper."""
+    from pinecone.exceptions import NotFoundException
+    from app.clients.resilience import get_status
+    assert get_status(NotFoundException()) == 404
+    assert get_status(None) is None and get_status(ValueError("x")) is None
+
+
+async def test_failure_logs_the_real_cause(caplog) -> None:
+    async def down() -> None:
+        raise ApiError(401)
+
+    with caplog.at_level("ERROR"):
+        with pytest.raises(ServiceUnavailableError):
+            await call_with_retries(down, service="Vector database", settings=make_settings())
+    assert "status=401" in caplog.text and "ApiError" in caplog.text
