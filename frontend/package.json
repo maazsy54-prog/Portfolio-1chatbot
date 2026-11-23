@@ -1,0 +1,7 @@
+{
+  "name": "rag-frontend-tests",
+  "private": true,
+  "description": "Test tooling only: the UI itself is plain HTML/JS served by FastAPI (no build step).",
+  "scripts": { "test": "node tests/smoke.cjs" },
+  "devDependencies": { "jsdom": "^31.0.0" }
+}
