@@ -302,3 +302,11 @@ async def test_failure_logs_the_real_cause(caplog) -> None:
         with pytest.raises(ServiceUnavailableError):
             await call_with_retries(down, service="Vector database", settings=make_settings())
     assert "status=401" in caplog.text and "ApiError" in caplog.text
+
+
+def test_error_log_uses_the_vendors_own_message() -> None:
+    from app.clients.resilience import describe_exception
+    quota = StatusError(status_code=429, body={"message": "You are using a Trial key, limited to 1000 API calls / month."})
+    assert "1000 API calls / month" in describe_exception(quota)
+    assert describe_exception(ValueError("plain")) == "plain"
+    assert len(describe_exception(ValueError("x" * 1000))) == 300

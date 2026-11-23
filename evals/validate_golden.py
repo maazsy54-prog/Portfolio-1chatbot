@@ -28,9 +28,12 @@ def validate_golden(golden: dict, corpus_dir: Path | None) -> list[str]:
     if corpus_dir:
         for name in golden.get("corpus", []):
             path = corpus_dir / name
-            if path.exists() and path.suffix.lower() == ".pdf":
-                doc = extract_text("pdf", path.read_bytes())
-                pages[name] = {s.page: s.text for s in doc.sections}
+            if path.exists() and path.suffix.lower() in {".pdf", ".docx"}:
+                kind = path.suffix.lower().lstrip(".")
+                doc = extract_text(kind, path.read_bytes())
+                # PDFs are checked per page; DOCX has no pages, so all text counts as page 0
+                pages[name] = ({s.page: s.text for s in doc.sections} if kind == "pdf"
+                               else {0: "\n".join(s.text for s in doc.sections)})
 
     for q in qs:
         tag = q["id"]
@@ -43,7 +46,7 @@ def validate_golden(golden: dict, corpus_dir: Path | None) -> list[str]:
                     found = [p for p, t in doc_pages.items() if contains(t, e)]
                     if not found:
                         errors.append(f"{tag}: evidence not found in {q['document']}: {e!r}")
-                    elif not set(found) & set(q.get("expected_pages", [])):
+                    elif q.get("expected_pages") and not set(found) & set(q["expected_pages"]):
                         errors.append(f"{tag}: evidence {e!r} is on pages {found}, not {q['expected_pages']}")
         elif q.get("evidence"):
             errors.append(f"{tag}: unanswerable question must not have evidence")

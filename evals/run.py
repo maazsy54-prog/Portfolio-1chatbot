@@ -20,7 +20,7 @@ from app.config import Settings, get_settings
 from evals.configs import CONFIGS, EvalConfig
 from evals.judge import Judge
 from evals.report import pick_winner, write_outputs
-from evals.runner import Backends, evaluate_config, find_failures, ingest_corpus, summarise
+from evals.runner import Backends, EvalAborted, evaluate_config, find_failures, ingest_corpus, summarise
 from evals.validate_golden import validate_golden
 
 logger = logging.getLogger("evals")
@@ -51,6 +51,14 @@ async def run_all(
         for c in configs:
             logger.info("evaluating config %s (%s)", c.name, c.description)
             results = await evaluate_config(c, golden, backends, settings, concurrency, use_judge)
+            errors = [r for r in results if r["error"]]
+            if len(errors) > 0.25 * len(results):
+                first = next(r["error"] for r in errors if not r["error"].startswith("skipped"))
+                raise EvalAborted(
+                    f"Config {c.name}: {len(errors)} of {len(results)} questions failed with API errors "
+                    f"(first: {first}). Numbers from this run would be meaningless, so nothing was written. "
+                    "Check your API quota/keys (see the 'call failed' lines above) and run again."
+                )
             all_results[c.name] = results
             summaries[c.name] = summarise(results, c)
             failures[c.name] = find_failures(results)
@@ -85,12 +93,16 @@ def main() -> None:
     parser.add_argument("--golden", default="evals/golden_set.json", type=Path)
     parser.add_argument("--output", default="evals/results", type=Path)
     parser.add_argument("--concurrency", type=int, default=3, help="parallel questions (lower if rate-limited)")
+    parser.add_argument("--llm-rpm", type=int, default=18, help="chat calls per minute (0 = unlimited; trial keys allow 20)")
+    parser.add_argument("--rerank-rpm", type=int, default=9, help="rerank calls per minute (0 = unlimited; trial keys allow ~10)")
     parser.add_argument("--no-judge", action="store_true")
+    parser.add_argument("--no-cache", action="store_true", help="do not reuse identical API responses within the run")
     parser.add_argument("--keep-namespaces", action="store_true")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
-    from app.clients.cohere_client import EmbeddingClient, LLMClient, Reranker
+    from app.clients.cohere_client import EmbeddingClient, Reranker
+    from app.clients.llm import make_llm
     from app.clients.pinecone_client import VectorStore
 
     golden_bytes = args.golden.read_bytes()
@@ -106,19 +118,35 @@ def main() -> None:
     # Patient retries: evaluation makes many calls and trial API keys are rate-limited.
     base = get_settings()
     settings = base.model_copy(update={"max_retries": 6, "retry_backoff_seconds": 2.0,
-                                       "http_timeout_seconds": 60.0})
-    llm = LLMClient(settings)
+                                       "http_timeout_seconds": 90.0,
+                                       "llm_calls_per_minute": args.llm_rpm,
+                                       "rerank_calls_per_minute": args.rerank_rpm})
+    llm = make_llm(settings)
     backends = Backends(
         embedder=EmbeddingClient(settings), reranker=Reranker(settings), llm=llm,
         store=VectorStore(settings), judge=Judge(llm, settings.judge_model or None),
     )
+    if not args.no_cache:
+        from evals.cache import CachedEmbedder, CachedLLM, CachedReranker, CachedStore
+        backends.embedder = CachedEmbedder(backends.embedder)
+        backends.reranker = CachedReranker(backends.reranker)
+        backends.store = CachedStore(backends.store)
+        backends.llm = CachedLLM(backends.llm)
+        backends.judge = Judge(backends.llm, settings.judge_model or None)
     out_dir = args.output / datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
-    paths = asyncio.run(run_all(
-        backends, golden, configs, args.corpus, settings, out_dir, args.concurrency,
-        args.keep_namespaces, not args.no_judge, golden_bytes,
-    ))
+    try:
+        paths = asyncio.run(run_all(
+            backends, golden, configs, args.corpus, settings, out_dir, args.concurrency,
+            args.keep_namespaces, not args.no_judge, golden_bytes,
+        ))
+    except EvalAborted as exc:
+        raise SystemExit(f"\nEVALUATION ABORTED\n{exc}")
     print("\n" + paths["summary"].read_text(encoding="utf-8").split("## Failures")[0])
     print(f"Winner by rule: {paths['winner']}\nFull results: {out_dir}")
+    if not args.no_cache:
+        for name in ("embedder", "reranker", "store", "llm"):
+            st = getattr(backends, name).stats()
+            print(f"cache {name}: {st['hits']} reused, {st['misses']} real calls")
 
 
 if __name__ == "__main__":

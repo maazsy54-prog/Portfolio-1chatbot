@@ -9,6 +9,8 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from app.generation import extract_json
+
 JUDGE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
@@ -53,7 +55,7 @@ def build_judge_prompt(question: str, reference: str, excerpts: str, answer: str
 
 def parse_verdict(raw: str) -> tuple[bool, bool, str]:
     """Parse the judge's JSON; raises ValueError if malformed."""
-    data = json.loads(re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip()))
+    data = json.loads(extract_json(raw))
     if not isinstance(data, dict) or not isinstance(data.get("correct"), bool) \
             or not isinstance(data.get("faithful"), bool):
         raise ValueError("judge reply missing boolean fields")

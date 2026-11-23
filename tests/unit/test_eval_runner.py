@@ -161,3 +161,55 @@ async def test_keep_namespaces_option(tmp_path) -> None:
     await run_all(backends(EvalLLM(), store), GOLDEN, [CFG], corpus(tmp_path), SETTINGS,
                   tmp_path / "out", keep_namespaces=True)
     assert CFG.namespace in store.ns
+
+
+# ---------------------------------------------------------------- caching, fail-fast, abort
+
+import pytest  # noqa: E402
+
+from app.errors import ServiceUnavailableError  # noqa: E402
+from evals.cache import CachedEmbedder, CachedLLM, CachedReranker, CachedStore  # noqa: E402
+from evals.runner import EvalAborted  # noqa: E402
+
+
+async def test_caches_reuse_identical_requests_and_pass_other_calls_through(tmp_path) -> None:
+    store = NamespacedStore()
+    llm = EvalLLM()
+    b = Backends(CachedEmbedder(FakeEmbedder()), CachedReranker(IdentityReranker()), CachedLLM(llm),
+                 CachedStore(store), Judge(CachedLLM(llm)))
+    await ingest_corpus(corpus(tmp_path), CFG.namespace, 40, 5, b, SETTINGS)   # upsert/delete pass through
+    assert store.ns[CFG.namespace]
+    first = await evaluate_config(EvalConfig("A", 40, 5, True), GOLDEN, b, SETTINGS)
+    calls_after_first = llm.calls
+    second = await evaluate_config(EvalConfig("A", 40, 5, True), GOLDEN, b, SETTINGS)
+    assert llm.calls == calls_after_first, "identical prompts must not hit the LLM again"
+    assert [r.get("answer") for r in first] == [r.get("answer") for r in second]
+    assert b.embedder.stats()["hits"] == 3 and b.store.stats()["hits"] == 3 and b.reranker.stats()["hits"] >= 2
+
+
+async def test_failing_backend_stops_after_a_few_errors(tmp_path) -> None:
+    class DownLLM(EvalLLM):
+        async def chat_json(self, **kw):
+            self.calls += 1
+            raise ServiceUnavailableError("Language model is temporarily unavailable.")
+
+    llm = DownLLM()
+    b = backends(llm)
+    await ingest_corpus(corpus(tmp_path), CFG.namespace, 40, 5, b, SETTINGS)
+    many = {"corpus": [], "questions": [dict(GOLDEN["questions"][0], id=f"x{i}") for i in range(30)]}
+    results = await evaluate_config(CFG, many, b, SETTINGS, concurrency=2, fail_fast_after=4)
+    assert llm.calls <= 4 + 2, f"kept calling a dead backend ({llm.calls} calls)"
+    assert all(r["error"] for r in results) and any(r["error"].startswith("skipped") for r in results)
+
+
+async def test_run_all_refuses_to_report_results_built_on_api_failures(tmp_path) -> None:
+    class DownLLM(EvalLLM):
+        async def chat_json(self, **kw):
+            raise ServiceUnavailableError("Language model is temporarily unavailable.")
+
+    store = NamespacedStore()
+    out = tmp_path / "out"
+    with pytest.raises(EvalAborted, match="meaningless"):
+        await run_all(backends(DownLLM(), store), GOLDEN, [CFG], corpus(tmp_path), SETTINGS, out)
+    assert not (out / "summary.md").exists(), "a misleading summary was written"
+    assert not store.ns, "namespaces were not cleaned up after the abort"

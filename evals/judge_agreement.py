@@ -37,5 +37,8 @@ if __name__ == "__main__":
         report = agreement(list(csv.DictReader(fh)))
     for prop, r in report.items():
         agree = "n/a" if r["agreement"] is None else f"{r['agreement']:.0%}"
-        kappa = "n/a" if r["kappa"] is None else f"{r['kappa']:.2f}"
+        kappa = "undefined (one rater used a single label)" if r["kappa"] is None and r["n"] else (
+            "n/a" if r["kappa"] is None else f"{r['kappa']:.2f}")
         print(f"{prop:9} n={r['n']:<3} agreement={agree:<5} kappa={kappa}")
+    if all(r["n"] == 0 for r in report.values()):
+        print("No labelled rows found: fill in the human_correct / human_faithful columns first.")

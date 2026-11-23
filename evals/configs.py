@@ -27,4 +27,6 @@ CONFIGS: list[EvalConfig] = [
     EvalConfig("B", 400, 50, True, description="400/50 + Cohere rerank (isolates the effect of reranking)"),
     EvalConfig("C", 200, 30, True, description="small chunks + rerank"),
     EvalConfig("D", 800, 100, True, description="large chunks + rerank"),
+    EvalConfig("E", 400, 50, True, rerank_threshold=0.10,
+               description="B + refuse when the best rerank score is below 0.10 (calibrated from B's scores)"),
 ]

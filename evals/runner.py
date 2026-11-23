@@ -25,6 +25,10 @@ logger = logging.getLogger("evals")
 KS = (1, 3, 5)
 
 
+class EvalAborted(RuntimeError):
+    """The evaluation cannot produce trustworthy numbers (too many API failures)."""
+
+
 @dataclass
 class Backends:
     """The external services the evaluation talks to."""
@@ -109,8 +113,8 @@ async def _evaluate_question(
         out["recall@3"] = m.recall_at_k(texts, files, document, evidence, 3)
         out["recall@5"] = m.recall_at_k(texts, files, document, evidence, 5)
         out["rr"] = m.reciprocal_rank(flags)
-        out["source_page_ok"] = bool(chunks) and chunks[0].filename == document and \
-            chunks[0].page in q.get("expected_pages", [])
+        out["source_page_ok"] = None if not q.get("expected_pages") else (
+            bool(chunks) and chunks[0].filename == document and chunks[0].page in q["expected_pages"])
         out["fact_recall"] = 0.0 if result.refused else m.fact_recall(result.answer, q.get("key_facts", []))
         out["citation_precision"] = m.citation_precision(cited_flags)
         if result.refused:
@@ -131,7 +135,7 @@ async def _evaluate_question(
 
 async def evaluate_config(
     config: EvalConfig, golden: dict, b: Backends, settings: Settings,
-    concurrency: int = 3, use_judge: bool = True,
+    concurrency: int = 3, use_judge: bool = True, fail_fast_after: int = 6,
 ) -> list[dict]:
     """Answer and score every golden question under one configuration."""
     cfg_settings = settings.model_copy(update={
@@ -140,10 +144,19 @@ async def evaluate_config(
         "rerank_threshold": config.rerank_threshold,
     })
     gate = asyncio.Semaphore(concurrency)
+    failures = 0
 
     async def run(q: dict) -> dict:
+        nonlocal failures
         async with gate:
-            return await _evaluate_question(q, config, b, cfg_settings, use_judge)
+            if failures >= fail_fast_after:  # stop spending API calls on a broken backend
+                return {"id": q["id"], "type": q["type"], "question": q["question"],
+                        "answerable": q["answerable"],
+                        "error": "skipped: too many API failures earlier in this configuration"}
+            result = await _evaluate_question(q, config, b, cfg_settings, use_judge)
+            if result["error"]:
+                failures += 1
+            return result
 
     return list(await asyncio.gather(*(run(q) for q in golden["questions"])))
 
