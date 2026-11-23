@@ -98,15 +98,22 @@ def build_user_prompt(question: str, context: str) -> str:
     return f"<context>\n{context}\n</context>\n\n<question>\n{_neutralise(question)}\n</question>"
 
 
+def extract_json(raw: str) -> str:
+    """Pull the JSON object out of a model reply that may wrap it in code fences or prose."""
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip()).strip()
+    if text.startswith("{"):
+        return text
+    start, end = text.find("{"), text.rfind("}")
+    return text[start : end + 1] if start != -1 and end > start else text
+
+
 def parse_answer(raw: str, n_chunks: int) -> ParsedAnswer:
     """Parse and validate the model's JSON.
 
     Raises:
         ValueError: malformed output, or a citation that was not retrieved.
     """
-    text = raw.strip()
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
-    data = json.loads(text)  # JSONDecodeError is a ValueError
+    data = json.loads(extract_json(raw))  # JSONDecodeError is a ValueError
     if not isinstance(data, dict):
         raise ValueError("reply is not a JSON object")
     answerable, answer, declared = data.get("answerable"), data.get("answer"), data.get("citations")

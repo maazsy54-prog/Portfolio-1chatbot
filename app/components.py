@@ -4,7 +4,8 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 
-from app.clients.cohere_client import EmbeddingClient, LLMClient, Reranker
+from app.clients.cohere_client import EmbeddingClient, Reranker
+from app.clients.llm import make_llm
 from app.clients.pinecone_client import VectorStore
 from app.config import Settings
 from app.db.session import build_engine, build_session_factory
@@ -33,6 +34,6 @@ def build_components(settings: Settings) -> Components:
         session_factory=build_session_factory(engine),
         embedder=EmbeddingClient(settings),
         reranker=Reranker(settings),
-        llm=LLMClient(settings),
+        llm=make_llm(settings),
         store=VectorStore(settings),
     )

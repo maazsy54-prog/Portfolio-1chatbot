@@ -65,6 +65,36 @@ async def test_rerank_reorders_and_sets_rerank_score() -> None:
     assert result.chunks[0].score == 0.5  # vector score preserved for display
 
 
+class SteepReranker:
+    """One strong chunk followed by weak ones, like a multi-part question's second passage."""
+
+    async def rerank(self, query, documents, top_n):
+        scores = [0.9, 0.05, 0.04, 0.03]
+        return [(i, scores[i]) for i in range(min(top_n, len(documents)))]
+
+
+async def test_threshold_judges_the_best_chunk_not_each_chunk() -> None:
+    s = make_settings(rerank_enabled=True, rerank_threshold=0.5, context_top_n=3)
+    result = await retrieve("q?", embedder=FakeEmbedder(), store=FakeStore([match(i, 0.5) for i in range(4)]),
+                            reranker=SteepReranker(), settings=s)
+    assert len(result.chunks) == 3, "weak supporting chunks must stay when the best chunk passes"
+
+
+async def test_best_chunk_below_threshold_refuses_everything() -> None:
+    s = make_settings(rerank_enabled=True, rerank_threshold=0.95, context_top_n=3)
+    result = await retrieve("q?", embedder=FakeEmbedder(), store=FakeStore([match(i, 0.5) for i in range(4)]),
+                            reranker=SteepReranker(), settings=s)
+    assert result.chunks == [] and result.fetched == 4
+
+
+async def test_vector_threshold_also_uses_the_best_chunk_only() -> None:
+    matches = [match(0, 0.9), match(1, 0.1), match(2, 0.05)]
+    kept, _ = await run(matches, rerank_enabled=False, similarity_threshold=0.5)
+    assert [c.id for c in kept.chunks] == ["D1:0", "D1:1", "D1:2"]
+    refused, _ = await run([match(0, 0.4), match(1, 0.3)], rerank_enabled=False, similarity_threshold=0.5)
+    assert refused.chunks == []
+
+
 async def test_rerank_threshold_can_empty_the_result() -> None:
     result, _ = await run([match(i, 0.5) for i in range(3)], rerank_threshold=0.95)
     assert result.chunks == [] and result.fetched == 3

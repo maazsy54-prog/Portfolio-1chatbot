@@ -1,0 +1,704 @@
+{
+  "version": 1,
+  "description": "Golden set for nimbus_faq.pdf. Relevance = a retrieved chunk from `document` that contains an `evidence` phrase (whitespace/case-insensitive).",
+  "corpus": [
+    "nimbus_faq.pdf"
+  ],
+  "questions": [
+    {
+      "type": "direct",
+      "question": "How long does standard shipping take?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "5 to 7 business days"
+      ],
+      "key_facts": [
+        "5 to 7"
+      ],
+      "reference_answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched.",
+      "id": "q001"
+    },
+    {
+      "type": "direct",
+      "question": "How much does standard shipping cost?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "$4.99"
+      ],
+      "key_facts": [
+        "4.99"
+      ],
+      "reference_answer": "Standard shipping costs $4.99. It is free on orders over $50.",
+      "id": "q002"
+    },
+    {
+      "type": "direct",
+      "question": "What does express shipping cost and how fast is it?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "$12.99"
+      ],
+      "key_facts": [
+        "12.99"
+      ],
+      "reference_answer": "Express shipping costs $12.99 and delivers within 2 business days of dispatch.",
+      "id": "q003"
+    },
+    {
+      "type": "direct",
+      "question": "Do you ship internationally?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "32 countries"
+      ],
+      "key_facts": [
+        "32 countries"
+      ],
+      "reference_answer": "Yes. We ship to 32 countries. International delivery takes 10 to 14 business days, and the customer pays any customs duties and import taxes.",
+      "id": "q004"
+    },
+    {
+      "type": "direct",
+      "question": "What is the cut-off time for same-day dispatch?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "2:00 PM Eastern Time"
+      ],
+      "key_facts": [
+        "2:00 pm"
+      ],
+      "reference_answer": "Orders placed before 2:00 PM Eastern Time on a business day are dispatched the same day.",
+      "id": "q005"
+    },
+    {
+      "type": "direct",
+      "question": "What is your return window?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1,
+        2
+      ],
+      "evidence": [
+        "within 30 days of delivery"
+      ],
+      "key_facts": [
+        "30 days"
+      ],
+      "reference_answer": "You can return most items within 30 days of delivery.",
+      "id": "q006"
+    },
+    {
+      "type": "direct",
+      "question": "How long do refunds take?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "5 to 10 business days"
+      ],
+      "key_facts": [
+        "5 to 10"
+      ],
+      "reference_answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item.",
+      "id": "q007"
+    },
+    {
+      "type": "direct",
+      "question": "How long is the warranty?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "2 year warranty"
+      ],
+      "key_facts": [
+        "2 year",
+        "1 year",
+        "5 year"
+      ],
+      "reference_answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty.",
+      "id": "q008"
+    },
+    {
+      "type": "direct",
+      "question": "Is the warranty transferable?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "original purchaser only"
+      ],
+      "key_facts": [
+        "original purchaser"
+      ],
+      "reference_answer": "No. The warranty applies to the original purchaser only and requires proof of purchase.",
+      "id": "q009"
+    },
+    {
+      "type": "direct",
+      "question": "Which payment methods do you accept?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Apple Pay"
+      ],
+      "key_facts": [
+        "apple pay",
+        "paypal"
+      ],
+      "reference_answer": "We accept Visa, Mastercard, American Express, PayPal and Apple Pay. We do not offer cash on delivery.",
+      "id": "q010"
+    },
+    {
+      "type": "direct",
+      "question": "How do I reset my password?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "expires after 30 minutes"
+      ],
+      "key_facts": [
+        "30 minutes"
+      ],
+      "reference_answer": "Use the Forgot Password link on the login page. The reset link we email expires after 30 minutes.",
+      "id": "q011"
+    },
+    {
+      "type": "direct",
+      "question": "What are your customer support hours?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Monday to Friday from 9 AM to 6 PM"
+      ],
+      "key_facts": [
+        "9 am",
+        "6 pm"
+      ],
+      "reference_answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. We are closed on Sundays.",
+      "id": "q012"
+    },
+    {
+      "type": "direct",
+      "question": "How quickly do you respond to emails?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "within 1 business day"
+      ],
+      "key_facts": [
+        "1 business day"
+      ],
+      "reference_answer": "We respond to support emails within 1 business day.",
+      "id": "q013"
+    },
+    {
+      "type": "direct",
+      "question": "Do you offer discounts for bulk or group orders?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        4
+      ],
+      "evidence": [
+        "20 or more units"
+      ],
+      "key_facts": [
+        "20",
+        "10%"
+      ],
+      "reference_answer": "Yes. Orders of 20 or more units of the same product receive a 10% discount. Contact sales@nimbusoutdoor.example to arrange it.",
+      "id": "q014"
+    },
+    {
+      "type": "direct",
+      "question": "Do you price match?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        4
+      ],
+      "evidence": [
+        "within 14 days of purchase"
+      ],
+      "key_facts": [
+        "14 days"
+      ],
+      "reference_answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "id": "q015"
+    },
+    {
+      "type": "reworded",
+      "question": "How many days will it take for my parcel to arrive with the regular delivery option?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "5 to 7 business days"
+      ],
+      "key_facts": [
+        "5 to 7"
+      ],
+      "reference_answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched.",
+      "id": "q016"
+    },
+    {
+      "type": "reworded",
+      "question": "If I send something back after 40 days, can I still get my money back?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "store credit only"
+      ],
+      "key_facts": [
+        "store credit"
+      ],
+      "reference_answer": "Yes. Items returned between 31 and 60 days after delivery are eligible for store credit only, not a refund to the original payment method.",
+      "id": "q017"
+    },
+    {
+      "type": "reworded",
+      "question": "My returned item got broken by the delivery company. What should I do?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "within 48 hours"
+      ],
+      "key_facts": [
+        "48 hours"
+      ],
+      "reference_answer": "Send photos of the damage to support within 48 hours of delivery so we can file a claim and arrange a replacement.",
+      "id": "q018"
+    },
+    {
+      "type": "reworded",
+      "question": "How long do I have to wait for my refund once you receive the item back?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "5 to 10 business days"
+      ],
+      "key_facts": [
+        "5 to 10"
+      ],
+      "reference_answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item.",
+      "id": "q019"
+    },
+    {
+      "type": "reworded",
+      "question": "Am I able to hand my tent warranty over to a friend?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "original purchaser only"
+      ],
+      "key_facts": [
+        "no"
+      ],
+      "reference_answer": "No. The warranty applies to the original purchaser only and requires proof of purchase.",
+      "id": "q020"
+    },
+    {
+      "type": "reworded",
+      "question": "How many years is a sleeping bag guaranteed for?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "5 year warranty"
+      ],
+      "key_facts": [
+        "5 year"
+      ],
+      "reference_answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty.",
+      "id": "q021"
+    },
+    {
+      "type": "reworded",
+      "question": "Does it work to use a second discount code on the same order?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Only one promo code"
+      ],
+      "key_facts": [
+        "one"
+      ],
+      "reference_answer": "No. Only one promo code can be applied to each order.",
+      "id": "q022"
+    },
+    {
+      "type": "reworded",
+      "question": "When can I reach someone at customer service on a Saturday?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Saturday from 10 AM to 2 PM"
+      ],
+      "key_facts": [
+        "10 am",
+        "2 pm"
+      ],
+      "reference_answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. We are closed on Sundays.",
+      "id": "q023"
+    },
+    {
+      "type": "reworded",
+      "question": "Is there a cheaper price available for students?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        4
+      ],
+      "evidence": [
+        "10% off"
+      ],
+      "key_facts": [
+        "10%"
+      ],
+      "reference_answer": "Yes. Verified students receive 10% off through our verification partner at checkout.",
+      "id": "q024"
+    },
+    {
+      "type": "reworded",
+      "question": "Can you match a lower price that I found at another shop?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        4
+      ],
+      "evidence": [
+        "within 14 days of purchase"
+      ],
+      "key_facts": [
+        "14 days"
+      ],
+      "reference_answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "id": "q025"
+    },
+    {
+      "type": "multi_part",
+      "question": "How much does standard shipping cost, and how long does it take?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1
+      ],
+      "evidence": [
+        "$4.99",
+        "5 to 7 business days"
+      ],
+      "key_facts": [
+        "4.99",
+        "5 to 7"
+      ],
+      "reference_answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched. Standard shipping costs $4.99. It is free on orders over $50.",
+      "id": "q026"
+    },
+    {
+      "type": "multi_part",
+      "question": "What is the return window, and who pays for return shipping?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        1,
+        2
+      ],
+      "evidence": [
+        "within 30 days of delivery",
+        "$6.50"
+      ],
+      "key_facts": [
+        "30 days",
+        "6.50"
+      ],
+      "reference_answer": "You can return most items within 30 days of delivery. Return shipping is free if the item is defective or we sent the wrong item. In all other cases a flat $6.50 return label fee is deducted from your refund.",
+      "id": "q027"
+    },
+    {
+      "type": "multi_part",
+      "question": "Which payment methods do you accept, and when is my card charged?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Apple Pay",
+        "charged when the order is dispatched"
+      ],
+      "key_facts": [
+        "apple pay",
+        "dispatched"
+      ],
+      "reference_answer": "We accept Visa, Mastercard, American Express, PayPal and Apple Pay. We do not offer cash on delivery. Your card is authorized when you place the order and charged when the order is dispatched.",
+      "id": "q028"
+    },
+    {
+      "type": "multi_part",
+      "question": "How long is the warranty on tents, and how do I make a claim?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2
+      ],
+      "evidence": [
+        "2 year warranty",
+        "warranty@nimbusoutdoor.example"
+      ],
+      "key_facts": [
+        "2 year",
+        "warranty@nimbusoutdoor.example"
+      ],
+      "reference_answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty. Email warranty@nimbusoutdoor.example with your order number and photos of the problem. We reply within 3 business days.",
+      "id": "q029"
+    },
+    {
+      "type": "multi_part",
+      "question": "What are your support hours, and how can I contact support?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "Saturday from 10 AM to 2 PM",
+        "1-800-555-0142"
+      ],
+      "key_facts": [
+        "9 am",
+        "1-800-555-0142"
+      ],
+      "reference_answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. We are closed on Sundays. Use live chat on our website, email support@nimbusoutdoor.example, or call 1-800-555-0142.",
+      "id": "q030"
+    },
+    {
+      "type": "multi_part",
+      "question": "How do Trail Points work, and how long are gift cards valid?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        3
+      ],
+      "evidence": [
+        "100 points can be redeemed for $5",
+        "valid for 3 years"
+      ],
+      "key_facts": [
+        "100 points",
+        "3 years"
+      ],
+      "reference_answer": "You earn 1 point for every $1 spent. 100 points can be redeemed for $5 of store credit. Points expire after 12 months of account inactivity. Gift cards are valid for 3 years from the purchase date and cannot be exchanged for cash.",
+      "id": "q031"
+    },
+    {
+      "type": "multi_part",
+      "question": "What is the warranty on sleeping bags, and do you offer a student discount?",
+      "answerable": true,
+      "language": "en",
+      "document": "nimbus_faq.pdf",
+      "expected_pages": [
+        2,
+        4
+      ],
+      "evidence": [
+        "5 year warranty",
+        "10% off"
+      ],
+      "key_facts": [
+        "5 year",
+        "10%"
+      ],
+      "reference_answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty. Yes. Verified students receive 10% off through our verification partner at checkout.",
+      "id": "q032"
+    },
+    {
+      "type": "unanswerable",
+      "question": "Do you sell hiking boots?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q033"
+    },
+    {
+      "type": "unanswerable",
+      "question": "What is the warranty period for trekking poles?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q034"
+    },
+    {
+      "type": "unanswerable",
+      "question": "Do you offer gift wrapping?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q035"
+    },
+    {
+      "type": "unanswerable",
+      "question": "Who is the CEO of Nimbus Outdoor Co.?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q036"
+    },
+    {
+      "type": "unanswerable",
+      "question": "Do you have a mobile app for iOS?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q037"
+    },
+    {
+      "type": "unanswerable",
+      "question": "What is the weather like in Paris today?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q038"
+    },
+    {
+      "type": "unanswerable",
+      "question": "How many Trail Points do I need to get a free tent?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q039"
+    },
+    {
+      "type": "unanswerable",
+      "question": "What are the dimensions of your two-person tent?",
+      "answerable": false,
+      "language": "en",
+      "document": null,
+      "expected_pages": [],
+      "evidence": [],
+      "key_facts": [],
+      "reference_answer": "The documents do not contain this information.",
+      "id": "q040"
+    }
+  ]
+}

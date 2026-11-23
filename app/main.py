@@ -2,8 +2,11 @@
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.components import Components, build_components
 from app.config import Settings, get_settings
@@ -14,6 +17,8 @@ from app.logging_conf import RequestContextMiddleware, configure_logging
 from app.routers import ask, documents, health
 
 logger = logging.getLogger(__name__)
+
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 
 def create_app(
@@ -47,6 +52,16 @@ def create_app(
     app.include_router(health.router)
     app.include_router(documents.router)
     app.include_router(ask.router)
+
+    has_frontend = (FRONTEND_DIR / "index.html").exists()
+    if has_frontend:  # served from /app so API routes and their JSON 404s are untouched
+        app.mount("/app", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
+    @app.get("/", include_in_schema=False)
+    async def root() -> RedirectResponse:
+        """Send visitors to the web UI (or the API docs if the UI is not installed)."""
+        return RedirectResponse("/app/" if has_frontend else "/docs")
+
     return app
 
 

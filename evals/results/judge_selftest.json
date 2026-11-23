@@ -1,0 +1,504 @@
+{
+  "n_questions": 16,
+  "by_kind": {
+    "correct": {
+      "n": 16,
+      "errors": 0,
+      "correct_verdict_ok": 1.0,
+      "faithful_verdict_ok": 1.0
+    },
+    "wrong_fact": {
+      "n": 16,
+      "errors": 0,
+      "correct_verdict_ok": 1.0,
+      "faithful_verdict_ok": 1.0
+    },
+    "unsupported_claim": {
+      "n": 16,
+      "errors": 0,
+      "faithful_verdict_ok": 1.0
+    }
+  },
+  "rows": [
+    {
+      "id": "q001",
+      "kind": "correct",
+      "answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q001",
+      "kind": "wrong_fact",
+      "answer": "Standard shipping takes 8 to 10 business days from the date your order is dispatched.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q001",
+      "kind": "unsupported_claim",
+      "answer": "Standard shipping takes 5 to 7 business days from the date your order is dispatched. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q003",
+      "kind": "correct",
+      "answer": "Express shipping costs $12.99 and delivers within 2 business days of dispatch.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q003",
+      "kind": "wrong_fact",
+      "answer": "Express shipping costs $15 and delivers within 5 business days of dispatch.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q003",
+      "kind": "unsupported_claim",
+      "answer": "Express shipping costs $12.99 and delivers within 2 business days of dispatch. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q005",
+      "kind": "correct",
+      "answer": "Orders placed before 2:00 PM Eastern Time on a business day are dispatched the same day.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q005",
+      "kind": "wrong_fact",
+      "answer": "Orders placed before 5:3 PM Eastern Time on a business day are dispatched the same day.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q005",
+      "kind": "unsupported_claim",
+      "answer": "Orders placed before 2:00 PM Eastern Time on a business day are dispatched the same day. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q007",
+      "kind": "correct",
+      "answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q007",
+      "kind": "wrong_fact",
+      "answer": "Refunds are issued to the original payment method within 8 to 13 business days after we receive the returned item.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q007",
+      "kind": "unsupported_claim",
+      "answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q009",
+      "kind": "correct",
+      "answer": "No. The warranty applies to the original purchaser only and requires proof of purchase.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q009",
+      "kind": "wrong_fact",
+      "answer": "Yes. The warranty applies to the original purchaser only and requires proof of purchase.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q009",
+      "kind": "unsupported_claim",
+      "answer": "No. The warranty applies to the original purchaser only and requires proof of purchase. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q011",
+      "kind": "correct",
+      "answer": "Use the Forgot Password link on the login page. The reset link we email expires after 30 minutes.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q011",
+      "kind": "wrong_fact",
+      "answer": "Use the Forgot Password link on the login page. The reset link we email expires after 33 minutes.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q011",
+      "kind": "unsupported_claim",
+      "answer": "Use the Forgot Password link on the login page. The reset link we email expires after 30 minutes. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q013",
+      "kind": "correct",
+      "answer": "We respond to support emails within 1 business day.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q013",
+      "kind": "wrong_fact",
+      "answer": "We respond to support emails within 4 business day.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q013",
+      "kind": "unsupported_claim",
+      "answer": "We respond to support emails within 1 business day. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q015",
+      "kind": "correct",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q015",
+      "kind": "wrong_fact",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 17 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q015",
+      "kind": "unsupported_claim",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q017",
+      "kind": "correct",
+      "answer": "Yes. Items returned between 31 and 60 days after delivery are eligible for store credit only, not a refund to the original payment method.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q017",
+      "kind": "wrong_fact",
+      "answer": "Yes. Items returned between 34 and 63 days after delivery are eligible for store credit only, not a refund to the original payment method.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q017",
+      "kind": "unsupported_claim",
+      "answer": "Yes. Items returned between 31 and 60 days after delivery are eligible for store credit only, not a refund to the original payment method. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q019",
+      "kind": "correct",
+      "answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q019",
+      "kind": "wrong_fact",
+      "answer": "Refunds are issued to the original payment method within 8 to 13 business days after we receive the returned item.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q019",
+      "kind": "unsupported_claim",
+      "answer": "Refunds are issued to the original payment method within 5 to 10 business days after we receive the returned item. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q021",
+      "kind": "correct",
+      "answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q021",
+      "kind": "wrong_fact",
+      "answer": "Tents and backpacks have a 5 year warranty. Cooking stoves and headlamps have a 4 year warranty. Sleeping bags have a 8 year warranty.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q021",
+      "kind": "unsupported_claim",
+      "answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q023",
+      "kind": "correct",
+      "answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. We are closed on Sundays.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q023",
+      "kind": "wrong_fact",
+      "answer": "Support is available Monday to Friday from 12 AM to 9 PM Eastern Time, and Saturday from 13 AM to 5 PM. We are closed on Sundays.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q023",
+      "kind": "unsupported_claim",
+      "answer": "Support is available Monday to Friday from 9 AM to 6 PM Eastern Time, and Saturday from 10 AM to 2 PM. We are closed on Sundays. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q025",
+      "kind": "correct",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q025",
+      "kind": "wrong_fact",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 17 days of purchase. Clearance items and marketplace sellers are excluded.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q025",
+      "kind": "unsupported_claim",
+      "answer": "We match the price of an identical item from an authorized retailer if you ask within 14 days of purchase. Clearance items and marketplace sellers are excluded. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": true,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q027",
+      "kind": "correct",
+      "answer": "You can return most items within 30 days of delivery. Return shipping is free if the item is defective or we sent the wrong item. In all other cases a flat $6.50 return label fee is deducted from your refund.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q027",
+      "kind": "wrong_fact",
+      "answer": "You can return most items within 33 days of delivery. Return shipping is free if the item is defective or we sent the wrong item. In all other cases a flat $9 return label fee is deducted from your refund.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q027",
+      "kind": "unsupported_claim",
+      "answer": "You can return most items within 30 days of delivery. Return shipping is free if the item is defective or we sent the wrong item. In all other cases a flat $6.50 return label fee is deducted from your refund. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q029",
+      "kind": "correct",
+      "answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty. Email warranty@nimbusoutdoor.example with your order number and photos of the problem. We reply within 3 business days.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q029",
+      "kind": "wrong_fact",
+      "answer": "Tents and backpacks have a 5 year warranty. Cooking stoves and headlamps have a 4 year warranty. Sleeping bags have a 8 year warranty. Email warranty@nimbusoutdoor.example with your order number and photos of the problem. We reply within 6 business days.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q029",
+      "kind": "unsupported_claim",
+      "answer": "Tents and backpacks have a 2 year warranty. Cooking stoves and headlamps have a 1 year warranty. Sleeping bags have a 5 year warranty. Email warranty@nimbusoutdoor.example with your order number and photos of the problem. We reply within 3 business days. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q031",
+      "kind": "correct",
+      "answer": "You earn 1 point for every $1 spent. 100 points can be redeemed for $5 of store credit. Points expire after 12 months of account inactivity. Gift cards are valid for 3 years from the purchase date and cannot be exchanged for cash.",
+      "expect_correct": true,
+      "expect_faithful": true,
+      "judge_correct": true,
+      "judge_faithful": true,
+      "error": null
+    },
+    {
+      "id": "q031",
+      "kind": "wrong_fact",
+      "answer": "You earn 4 point for every $4 spent. 103 points can be redeemed for $8 of store credit. Points expire after 15 months of account inactivity. Gift cards are valid for 6 years from the purchase date and cannot be exchanged for cash.",
+      "expect_correct": false,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    },
+    {
+      "id": "q031",
+      "kind": "unsupported_claim",
+      "answer": "You earn 1 point for every $1 spent. 100 points can be redeemed for $5 of store credit. Points expire after 12 months of account inactivity. Gift cards are valid for 3 years from the purchase date and cannot be exchanged for cash. Every customer also receives a free tent with their first order.",
+      "expect_correct": null,
+      "expect_faithful": false,
+      "judge_correct": false,
+      "judge_faithful": false,
+      "error": null
+    }
+  ]
+}

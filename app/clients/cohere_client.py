@@ -10,6 +10,7 @@ from typing import Any
 import cohere
 
 from app.clients.resilience import call_with_retries
+from app.clients.throttle import CallThrottle
 from app.config import Settings
 from app.errors import ServiceUnavailableError
 
@@ -41,10 +42,11 @@ class EmbeddingClient:
     measurably hurts retrieval quality, so they are separate methods.
     """
 
-    def __init__(self, settings: Settings, client: Any | None = None) -> None:
+    def __init__(self, settings: Settings, client: Any | None = None, throttle: Any | None = None) -> None:
         self._settings = settings
         self._client = client or make_cohere_client(settings)
         self._semaphore = asyncio.Semaphore(settings.embed_concurrency)
+        self._throttle = throttle or CallThrottle(settings.embed_calls_per_minute)
 
     async def _embed_batch(self, batch: list[str], input_type: str) -> list[list[float]]:
         """Embed one batch (at most `embed_batch_size` texts)."""
@@ -60,6 +62,7 @@ class EmbeddingClient:
             return response.embeddings.float_
 
         async with self._semaphore:
+            await self._throttle.acquire()
             vectors = await call_with_retries(
                 call, service="Embedding service", settings=self._settings
             )
@@ -89,9 +92,10 @@ class EmbeddingClient:
 class Reranker:
     """Re-scores candidate passages against the question with Cohere Rerank."""
 
-    def __init__(self, settings: Settings, client: Any | None = None) -> None:
+    def __init__(self, settings: Settings, client: Any | None = None, throttle: Any | None = None) -> None:
         self._settings = settings
         self._client = client or make_cohere_client(settings)
+        self._throttle = throttle or CallThrottle(settings.rerank_calls_per_minute)
 
     async def rerank(
         self, query: str, documents: list[str], top_n: int
@@ -109,6 +113,7 @@ class Reranker:
             )
             return [(r.index, float(r.relevance_score)) for r in response.results]
 
+        await self._throttle.acquire()
         return await call_with_retries(call, service="Rerank service", settings=self._settings)
 
 
@@ -124,23 +129,31 @@ class LLMResponse:
 class LLMClient:
     """Calls the answer model and returns JSON text constrained by ANSWER_SCHEMA."""
 
-    def __init__(self, settings: Settings, client: Any | None = None) -> None:
+    def __init__(self, settings: Settings, client: Any | None = None, throttle: Any | None = None) -> None:
         self._settings = settings
         self._client = client or make_cohere_client(settings)
+        self._throttle = throttle or CallThrottle(settings.llm_calls_per_minute)
 
-    async def chat_json(self, *, system: str, user: str) -> LLMResponse:
-        """Send one system + user message pair and return the JSON reply."""
+    async def chat_json(
+        self, *, system: str, user: str,
+        schema: dict[str, Any] | None = None, model: str | None = None,
+    ) -> LLMResponse:
+        """Send one system + user message pair and return the JSON reply.
+
+        `schema` and `model` default to the answer schema and answer model; the
+        evaluation judge passes its own.
+        """
 
         async def call() -> LLMResponse:
             response = await self._client.chat(
-                model=self._settings.llm_model,
+                model=model or self._settings.llm_model,
                 messages=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
                 ],
                 temperature=self._settings.llm_temperature,
                 max_tokens=self._settings.llm_max_tokens,
-                response_format=cohere.JsonObjectResponseFormatV2(json_schema=ANSWER_SCHEMA),
+                response_format=cohere.JsonObjectResponseFormatV2(json_schema=schema or ANSWER_SCHEMA),
             )
             parts = response.message.content or []
             text = "".join(getattr(p, "text", "") or "" for p in parts)
@@ -151,4 +164,5 @@ class LLMClient:
                 output_tokens=int(getattr(tokens, "output_tokens", 0) or 0),
             )
 
+        await self._throttle.acquire()
         return await call_with_retries(call, service="Language model", settings=self._settings)
