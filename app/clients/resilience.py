@@ -6,17 +6,12 @@ ServiceUnavailableError (HTTP 503) so routes never leak vendor exceptions.
 """
 import asyncio
 import logging
+import random
 from collections.abc import Awaitable, Callable
 from typing import TypeVar
 
 import httpx
-from tenacity import (
-    AsyncRetrying,
-    retry_if_exception,
-    stop_after_attempt,
-    wait_exponential_jitter,
-    wait_none,
-)
+from tenacity import AsyncRetrying, retry_if_exception, stop_after_attempt
 
 from app.config import Settings
 from app.errors import ServiceUnavailableError
@@ -41,6 +36,14 @@ def get_status(exc: BaseException | None) -> int | None:
     return status if isinstance(status, int) else None
 
 
+def describe_exception(exc: BaseException) -> str:
+    """The vendor's own error message if it has one (e.g. a monthly-quota notice), else str(exc)."""
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict) and body.get("message"):
+        return str(body["message"])[:300]
+    return str(exc)[:300]
+
+
 def is_transient(exc: BaseException) -> bool:
     """Return True if retrying the call could plausibly succeed."""
     if isinstance(
@@ -53,6 +56,24 @@ def is_transient(exc: BaseException) -> bool:
     return get_status(exc) in TRANSIENT_STATUS_CODES
 
 
+def make_wait(settings: Settings):
+    """Backoff strategy: short exponential waits with jitter, but a rate limit (429) waits
+    10s x attempt (max 60s), because a per-minute quota will not clear in a few seconds."""
+    backoff = settings.retry_backoff_seconds
+
+    def wait(retry_state) -> float:
+        if backoff <= 0:
+            return 0.0
+        attempt = retry_state.attempt_number
+        delay = min(8.0, backoff * 2 ** (attempt - 1)) + random.uniform(0, backoff)
+        error = retry_state.outcome.exception() if retry_state.outcome else None
+        if get_status(error) == 429:
+            delay = max(delay, min(60.0, 10.0 * attempt))
+        return delay
+
+    return wait
+
+
 async def call_with_retries(
     fn: Callable[[], Awaitable[T]], *, service: str, settings: Settings
 ) -> T:
@@ -61,11 +82,7 @@ async def call_with_retries(
     Raises:
         ServiceUnavailableError: the call failed or kept failing.
     """
-    wait = (
-        wait_exponential_jitter(initial=settings.retry_backoff_seconds, max=8)
-        if settings.retry_backoff_seconds > 0
-        else wait_none()
-    )
+    wait = make_wait(settings)
     result: T
     try:
         async for attempt in AsyncRetrying(
@@ -81,7 +98,7 @@ async def call_with_retries(
         # (The logging filter masks any known secret value.)
         logger.error(
             "%s call failed: %s (status=%s): %s", service, type(exc).__name__,
-            get_status(exc), str(exc)[:300],
+            get_status(exc), describe_exception(exc),
         )
         raise ServiceUnavailableError(f"{service} is temporarily unavailable.") from exc
     return result

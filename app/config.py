@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     embedding_dim: int = 1024  # must match the Pinecone index dimension
     rerank_model: str = "rerank-v3.5"
     llm_model: str = "command-a-03-2025"
+    # Answer-LLM provider: "cohere" (default) or "openai_compatible" (Groq, Gemini, OpenRouter, OpenAI...)
+    llm_provider: str = "cohere"
+    llm_base_url: str = ""  # e.g. https://api.groq.com/openai/v1
+    llm_api_key: SecretStr = SecretStr("")
+    llm_json_mode: bool = True  # send response_format=json_object (turn off if a provider rejects it)
 
     # --- Chunking ---
     chunk_size_tokens: int = 400
@@ -74,6 +79,12 @@ class Settings(BaseSettings):
     index_visibility_timeout_seconds: float = 15.0  # wait for fresh vectors
     index_poll_interval_seconds: float = 0.5  # how often to re-check visibility
 
+    # --- Vendor rate limits (0 = unlimited). Trial Cohere keys: ~20 chat and ~10 rerank calls/min,
+    # so set e.g. LLM_CALLS_PER_MINUTE=18 and RERANK_CALLS_PER_MINUTE=9 to wait instead of failing.
+    llm_calls_per_minute: int = 0
+    rerank_calls_per_minute: int = 0
+    embed_calls_per_minute: int = 0
+
     @field_validator("database_url", mode="before")
     @classmethod
     def normalize_database_url(cls, value: object) -> object:
@@ -93,7 +104,7 @@ class Settings(BaseSettings):
 
     def secret_values(self) -> list[str]:
         """Return all non-empty secret values (used by the log redactor)."""
-        secrets = (self.cohere_api_key, self.pinecone_api_key, self.database_url)
+        secrets = (self.cohere_api_key, self.pinecone_api_key, self.database_url, self.llm_api_key)
         return [s.get_secret_value() for s in secrets if s.get_secret_value()]
 
 

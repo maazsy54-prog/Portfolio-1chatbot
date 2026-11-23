@@ -63,9 +63,9 @@ async def retrieve(
 ) -> RetrievalResult:
     """Find the passages that best answer `question`.
 
-    Steps: embed -> vector search (top_k) -> rerank (optional) -> score threshold
-    -> keep `context_top_n`. An empty result means "nothing relevant", and the
-    caller must refuse instead of calling the LLM.
+    Steps: embed -> vector search (top_k) -> rerank (optional) -> keep `context_top_n`
+    -> refuse if the BEST chunk scores below the threshold. An empty result means
+    "nothing relevant", and the caller must refuse instead of calling the LLM.
     """
     vector = await embedder.embed_query(question)
     metadata_filter: dict[str, Any] | None = (
@@ -84,9 +84,13 @@ async def retrieve(
             question, [c.text for c in candidates], top_n=settings.context_top_n
         )
         chunks = [replace(candidates[i], rerank_score=score) for i, score in ranked]
-        chunks = [c for c in chunks if (c.rerank_score or 0.0) >= settings.rerank_threshold]
+        # The threshold asks "is ANYTHING relevant?", so it applies to the best chunk only.
+        # Pruning each weaker chunk starved multi-part questions of the second passage they need.
+        if not chunks or (chunks[0].rerank_score or 0.0) < settings.rerank_threshold:
+            chunks = []
     else:
-        chunks = [c for c in candidates if c.score >= settings.similarity_threshold]
-        chunks = chunks[: settings.context_top_n]
+        chunks = candidates[: settings.context_top_n]
+        if not chunks or chunks[0].score < settings.similarity_threshold:
+            chunks = []
 
     return RetrievalResult(chunks=chunks, fetched=fetched, reranked=do_rerank and fetched > 0)
