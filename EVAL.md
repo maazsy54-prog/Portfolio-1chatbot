@@ -153,3 +153,54 @@ python -m evals.make_eval_md
 ```
 
 Run metadata: embedding `embed-v4.0` (1024d), LLM `command-a-03-2025`, judge `command-a-03-2025 (same as LLM)`, rerank `rerank-v3.5`, temperature 0.0, top-k 20, context chunks 5, golden set sha256 `dd04bfe127ca`.
+
+## Run 2: production LLM, corrected refusal threshold
+
+Run `evals/results/20261123-173446` (2026-11-23 17:51 UTC, commit `e6af0df`). Answer model `openai/gpt-oss-20b`, judge `openai/gpt-oss-20b (same as LLM)`, embedding `embed-v4.0` (1024d), rerank `rerank-v3.5`, temperature 0.0, same golden set (`dd04bfe127ca`, 40 questions). Identical requests within a run are served from a cache, so configurations that share a prompt share one model call.
+
+| Config | Chunk size / overlap | Rerank | Refusal threshold | Description |
+|---|---|---|---|---|
+| B | 400/50 | yes | 0.0 | 400/50 + Cohere rerank (isolates the effect of reranking) |
+| E | 400/50 | yes | 0.1 | B + refuse when the best rerank score is below 0.10 (calibrated from B's scores) |
+
+### Results
+
+| Metric | B | E |
+|---|---|---|
+| hit@1 | 1.000 | 1.000 |
+| hit@5 | 1.000 | 1.000 |
+| MRR | 1.000 | 1.000 |
+| correct (judge) | 0.893 | 0.875 |
+| faithful (judge) | 1.000 | 1.000 |
+| false refusals (answerable) | 0.000 | 0.000 |
+| unanswerable correctly refused | 1.000 | 1.000 |
+| unanswerable hallucinated | 0.000 | 0.000 |
+| refused before the LLM (threshold) | 0 | 2 |
+| generation tokens in / question | 1761 | 1669 |
+| latency p50 / p95 (s) | 15.48 / 116.00 | 0.00 / 13.08 |
+| questions with API errors | 3 | 0 |
+
+### Effect of the corrected refusal threshold (B to E)
+
+- Correct (judge): 0.893 to 0.875 (-0.018).
+- False refusals: 0.000 to 0.000.
+- Unanswerable hallucinated: 0.000 to 0.000.
+- Questions refused before any LLM call: 0 to 2, each saving one generation call (and its judge call).
+- Prompt tokens per question: 1761 to 1669.
+
+### Failures
+
+**Configuration B:** 
+- `q002` (direct) **wrong_answer**: How much does standard shipping cost?
+- `q010` (direct) **error**: Which payment methods do you accept?
+- `q017` (reworded) **wrong_answer**: If I send something back after 40 days, can I still get my money back?
+- `q025` (reworded) **error**: Can you match a lower price that I found at another shop?
+- `q027` (multi_part) **error**: What is the return window, and who pays for return shipping?
+- `q028` (multi_part) **wrong_answer**: Which payment methods do you accept, and when is my card charged?
+**Configuration E:** 
+- `q002` (direct) **wrong_answer**: How much does standard shipping cost?
+- `q010` (direct) **wrong_answer**: Which payment methods do you accept?
+- `q017` (reworded) **wrong_answer**: If I send something back after 40 days, can I still get my money back?
+- `q028` (multi_part) **wrong_answer**: Which payment methods do you accept, and when is my card charged?
+
+*TODO (write yourself): what this run shows, and whether the corrected threshold is safe to enable.*

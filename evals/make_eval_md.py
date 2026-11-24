@@ -215,14 +215,81 @@ def build_eval_md(run: dict, golden: dict, selftest: dict | None, human: dict | 
     return "\n".join(L)
 
 
+def _early_refusals(results: list[dict]) -> int:
+    """Questions refused by the retrieval threshold, i.e. without any LLM call."""
+    return sum(1 for r in results if r.get("refusal_reason") == "no_relevant_context")
+
+
+def build_addendum(run: dict, title: str, run_dir: str) -> str:
+    """A self-contained EVAL.md section for a follow-up run (e.g. a different LLM, a fixed threshold)."""
+    meta, cfgs = run["meta"], run["configs"]
+    names = list(cfgs)
+    S = {n: cfgs[n]["summary"] for n in names}
+    L = [f"## {title}", "",
+         f"Run `{run_dir}` ({meta['timestamp']}, commit `{meta['git_commit']}`). Answer model `{meta['llm_model']}`, "
+         f"judge `{meta['judge_model']}`, embedding `{meta['embedding_model']}` ({meta['embedding_dim']}d), "
+         f"rerank `{meta['rerank_model']}`, temperature {meta['temperature']}, same golden set "
+         f"(`{meta['golden_sha256'][:12]}`, {meta['golden_questions']} questions). Identical requests within a run are "
+         "served from a cache, so configurations that share a prompt share one model call.", "",
+         "| Config | Chunk size / overlap | Rerank | Refusal threshold | Description |", "|---|---|---|---|---|"]
+    for n in names:
+        c = cfgs[n]["config"]
+        thr = c["rerank_threshold"] if c["rerank"] else c["similarity_threshold"]
+        L.append(f"| {n} | {c['chunk_size']}/{c['chunk_overlap']} | {'yes' if c['rerank'] else 'no'} | {thr} | {c['description']} |")
+    early = {n: _early_refusals(cfgs[n]["results"]) for n in names}
+    L += ["", "### Results", ""]
+    L += _table(names, [
+        ("hit@1", [_f(S[n]["retrieval"]["hit@1"]) for n in names]),
+        ("hit@5", [_f(S[n]["retrieval"]["hit@5"]) for n in names]),
+        ("MRR", [_f(S[n]["retrieval"]["mrr"]) for n in names]),
+        ("correct (judge)", [_f(S[n]["answers"]["correct_rate"]) for n in names]),
+        ("faithful (judge)", [_f(S[n]["answers"]["faithful_rate"]) for n in names]),
+        ("false refusals (answerable)", [_f(S[n]["answers"]["false_refusal_rate"]) for n in names]),
+        ("unanswerable correctly refused", [_f(S[n]["answers"]["unanswerable_refused_rate"]) for n in names]),
+        ("unanswerable hallucinated", [_f(S[n]["answers"]["unanswerable_hallucinated_rate"]) for n in names]),
+        ("refused before the LLM (threshold)", [str(early[n]) for n in names]),
+        ("generation tokens in / question", [_f(S[n]["tokens_per_question"]["generation_in"], 0) for n in names]),
+        ("latency p50 / p95 (s)", [f"{_f(S[n]['latency_s']['p50'], 2)} / {_f(S[n]['latency_s']['p95'], 2)}" for n in names]),
+        ("questions with API errors", [str(S[n]["n_errors"]) for n in names]),
+    ])
+    if "B" in S and "E" in S:
+        b, e = S["B"], S["E"]
+        L += ["", "### Effect of the corrected refusal threshold (B to E)", "",
+              f"- Correct (judge): {_f(b['answers']['correct_rate'])} to {_f(e['answers']['correct_rate'])} "
+              f"({_delta(b['answers']['correct_rate'], e['answers']['correct_rate'])}).",
+              f"- False refusals: {_f(b['answers']['false_refusal_rate'])} to {_f(e['answers']['false_refusal_rate'])}.",
+              f"- Unanswerable hallucinated: {_f(b['answers']['unanswerable_hallucinated_rate'])} to "
+              f"{_f(e['answers']['unanswerable_hallucinated_rate'])}.",
+              f"- Questions refused before any LLM call: {early['B']} to {early['E']}, "
+              f"each saving one generation call (and its judge call).",
+              f"- Prompt tokens per question: {_f(b['tokens_per_question']['generation_in'], 0)} to "
+              f"{_f(e['tokens_per_question']['generation_in'], 0)}."]
+    L += ["", "### Failures", ""]
+    for n in names:
+        fails = cfgs[n]["failures"]
+        L.append(f"**Configuration {n}:** " + ("none." if not fails else ""))
+        for f in fails[:20]:
+            L.append(f"- `{f['id']}` ({f['type']}) **{', '.join(f['issues'])}**: {f['question']}")
+    L += ["", "*TODO (write yourself): what this run shows, and whether the corrected threshold is safe to enable.*", ""]
+    return "\n".join(L)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate EVAL.md from a saved evaluation run.")
     parser.add_argument("run_dir", nargs="?", type=Path)
     parser.add_argument("--golden", default="evals/golden_set.json", type=Path)
     parser.add_argument("--output", default="EVAL.md", type=Path)
+    parser.add_argument("--append-to", type=Path, help="append a follow-up-run section to this file instead of writing a full report")
+    parser.add_argument("--title", default="Follow-up run", help="heading for the appended section")
     args = parser.parse_args()
     run_dir = args.run_dir or latest_run(Path("evals/results"))
     run = json.loads((run_dir / "results.json").read_text(encoding="utf-8"))
+    if args.append_to:
+        section = build_addendum(run, args.title, run_dir.as_posix())
+        with args.append_to.open("a", encoding="utf-8") as fh:
+            fh.write("\n" + section)
+        print(f"Appended '{args.title}' to {args.append_to} from {run_dir}")
+        return
     golden = json.loads(args.golden.read_text(encoding="utf-8"))
     st_path = Path("evals/results/judge_selftest.json")
     selftest = json.loads(st_path.read_text(encoding="utf-8")) if st_path.exists() else None
